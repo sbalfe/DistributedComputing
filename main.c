@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <mpi.h>
-
+// test
 int main(int argc, char **argv) {
     int rc, myrank, nproc, namelen;
     char name[MPI_MAX_PROCESSOR_NAME];
