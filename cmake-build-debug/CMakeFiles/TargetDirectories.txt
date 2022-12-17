@@ -1,0 +1,3 @@
+/home/shriller44/university/University/ParallelComputing-CM30225/Coursework/DistributedComputing/cmake-build-debug/CMakeFiles/DistributedComputing.dir
+/home/shriller44/university/University/ParallelComputing-CM30225/Coursework/DistributedComputing/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/shriller44/university/University/ParallelComputing-CM30225/Coursework/DistributedComputing/cmake-build-debug/CMakeFiles/rebuild_cache.dir

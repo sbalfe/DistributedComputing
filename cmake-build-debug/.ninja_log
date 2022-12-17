@@ -1,0 +1,9 @@
+# ninja log v5
+0	28	1671287836852453139	CMakeFiles/DistributedComputing.dir/main.c.o	3d7c5b779b4ee211
+0	24	1671287931700341342	DistributedComputing	4f767f1469974354
+0	33	1671295666424930803	CMakeFiles/DistributedComputing.dir/main.c.o	3d7c5b779b4ee211
+33	63	1671295666454931206	DistributedComputing	4f767f1469974354
+0	37	1671295675751722854	CMakeFiles/DistributedComputing.dir/main.c.o	3d7c5b779b4ee211
+37	64	1671295675781723257	DistributedComputing	4f767f1469974354
+0	47	1671307812453813623	CMakeFiles/DistributedComputing.dir/main.c.o	3d7c5b779b4ee211
+47	81	1671307812487147414	DistributedComputing	4f767f1469974354

@@ -1,0 +1,6 @@
+/var/lib/snapd/snap/clion/218/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/var/lib/snapd/snap/clion/218/bin/ninja/linux/ninja -G Ninja -S /home/shriller44/university/University/ParallelComputing-CM30225/Coursework/DistributedComputing -B /home/shriller44/university/University/ParallelComputing-CM30225/Coursework/DistributedComputing/cmake-build-debug
+-- Found MPI_C: /usr/lib/libmpi.so (found version "3.1") 
+-- Found MPI: TRUE (found version "3.1")  
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/shriller44/university/University/ParallelComputing-CM30225/Coursework/DistributedComputing/cmake-build-debug
