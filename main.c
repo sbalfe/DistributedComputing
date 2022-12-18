@@ -11,7 +11,7 @@ int main(int argc, char **argv) {
 
     // always check rc to ensure there was no errors
     if (rc != MPI_SUCCESS) {
-        printf("Error starting MPI program\n");
+        printf("Error starting MPI test program\n");
         MPI_Abort(MPI_COMM_WORLD, rc);
     }
 
