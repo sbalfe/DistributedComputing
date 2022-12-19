@@ -49,8 +49,8 @@ cmake_ninja_workdir = /home/shriller44/university/University/ParallelComputing-C
 
 build cmake_object_order_depends_target_DistributedComputing: phony || CMakeFiles/DistributedComputing.dir
 
-build CMakeFiles/DistributedComputing.dir/test.c.o: C_COMPILER__DistributedComputing_Debug /home/shriller44/university/University/ParallelComputing-CM30225/Coursework/DistributedComputing/test.c || cmake_object_order_depends_target_DistributedComputing
-  DEP_FILE = CMakeFiles/DistributedComputing.dir/test.c.o.d
+build CMakeFiles/DistributedComputing.dir/main.c.o: C_COMPILER__DistributedComputing_Debug /home/shriller44/university/University/ParallelComputing-CM30225/Coursework/DistributedComputing/main.c || cmake_object_order_depends_target_DistributedComputing
+  DEP_FILE = CMakeFiles/DistributedComputing.dir/main.c.o.d
   FLAGS = -g -fdiagnostics-color=always -std=gnu2x
   OBJECT_DIR = CMakeFiles/DistributedComputing.dir
   OBJECT_FILE_DIR = CMakeFiles/DistributedComputing.dir
@@ -63,7 +63,7 @@ build CMakeFiles/DistributedComputing.dir/test.c.o: C_COMPILER__DistributedCompu
 #############################################
 # Link the executable DistributedComputing
 
-build DistributedComputing: C_EXECUTABLE_LINKER__DistributedComputing_Debug CMakeFiles/DistributedComputing.dir/test.c.o | /usr/lib/libmpi.so
+build DistributedComputing: C_EXECUTABLE_LINKER__DistributedComputing_Debug CMakeFiles/DistributedComputing.dir/main.c.o | /usr/lib/libmpi.so
   FLAGS = -g
   LINK_LIBRARIES = /usr/lib/libmpi.so
   OBJECT_DIR = CMakeFiles/DistributedComputing.dir

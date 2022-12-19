@@ -1,57 +1,45 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <mpi.h>
+
 // test
+
+
+typedef struct context {
+
+} context_t ;
+
 int main(int argc, char **argv) {
-    int rc, myrank, nproc, namelen;
+
+    int rc, my_rank, n_processors, name_len;
     char name[MPI_MAX_PROCESSOR_NAME];
 
-    // set up the system. This must always be done. batch processing system (e.g. SLURM) starts the
-    // processes on all the processors. This does the setup for connections between them.
     rc = MPI_Init(&argc, &argv);
 
-    // always check rc to ensure there was no errors
     if (rc != MPI_SUCCESS) {
         printf("Error starting MPI test program\n");
         MPI_Abort(MPI_COMM_WORLD, rc);
     }
 
-    // MPI_COMM_WORLD, system can be divided into subsets of processors called communicators
-    // The world communicator is all processors
-    // MPI_COMM_SELF refers to just the calling processor.
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &n_processors);
 
-    // MPI_Comm_rank , each process in a communicator has a unique rank within that communicator
-    // This is just an integer from 0 to size of the communicator - 1, therefore for world the rank ranges from 0 to total number of processors -1 .
-    MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
+    int *p_buffer = NULL;
 
-    // obtain the size of the communicator
-    MPI_Comm_size(MPI_COMM_WORLD, &nproc);
-
-    if (nproc < 2){
-        printf("two processors are required\n");
-        exit(-1);
+    if (my_rank == 0){
+        p_buffer = malloc(sizeof(int) * 2);
+        p_buffer[0] = 1;
+        p_buffer[1] = 2;
     }
 
-    int n[5];
+    MPI_Bcast(p_buffer, 2, MPI_INT, 0, MPI_COMM_WORLD);
 
-    // all processors run the same code (SPMD).
-    // This is how we get different things happening on different processors.
-    if (myrank == 0) {
-        // array to read, number of elements, type of elements, rank to send to, unique ID, rank of communicator being used.
-        MPI_Send(n,5, MPI_INT, 1, 99, MPI_COMM_WORLD);
-    }
-    else if (myrank == 1){
-        MPI_Status stat;
-        // receive into this array, 5 elements, of type int, from rank 0, identified by 99, rank of communicator being used.
-        MPI_Recv(n,5, MPI_INT, 0,99, MPI_COMM_WORLD, &stat);
-    }
+    printf("%d: first item is %d", my_rank, p_buffer[1]);
 
-    
-    namelen = MPI_MAX_PROCESSOR_NAME;
-    MPI_Get_processor_name(name, &namelen);
-    printf("hello world %d from ’%s’\n", myrank, name);
+    name_len = MPI_MAX_PROCESSOR_NAME;
+    MPI_Get_processor_name(name, &name_len);
 
-    // all processors must always call this to tidy up their MPI state.
+
     MPI_Finalize();
 
     return 0;
