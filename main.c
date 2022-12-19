@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <mpi.h>
 // test
 int main(int argc, char **argv) {
@@ -26,18 +27,26 @@ int main(int argc, char **argv) {
     // obtain the size of the communicator
     MPI_Comm_size(MPI_COMM_WORLD, &nproc);
 
+    if (nproc < 2){
+        printf("two processors are required\n");
+        exit(-1);
+    }
+
     int n[5];
+
     // all processors run the same code (SPMD).
     // This is how we get different things happening on different processors.
     if (myrank == 0) {
-        printf("main reports %d procs\n", nproc);
+        // array to read, number of elements, type of elements, rank to send to, unique ID, rank of communicator being used.
         MPI_Send(n,5, MPI_INT, 1, 99, MPI_COMM_WORLD);
     }
     else if (myrank == 1){
         MPI_Status stat;
+        // receive into this array, 5 elements, of type int, from rank 0, identified by 99, rank of communicator being used.
         MPI_Recv(n,5, MPI_INT, 0,99, MPI_COMM_WORLD, &stat);
     }
 
+    
     namelen = MPI_MAX_PROCESSOR_NAME;
     MPI_Get_processor_name(name, &namelen);
     printf("hello world %d from ’%s’\n", myrank, name);
