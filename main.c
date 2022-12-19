@@ -27,8 +27,7 @@ int main(int argc, char **argv) {
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &n_processors);
 
-    int *p_send_buffer = NULL;
-    p_send_buffer = calloc(n_processors, sizeof(int));
+    int *p_send_buffer = calloc(n_processors, sizeof(int));
 
     int *p_receive_value = NULL;
     p_receive_value = malloc(sizeof(int));
