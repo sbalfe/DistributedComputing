@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
         //p_buffer[1] = 2;
     }
 
-    MPI_Bcast(p_buffer, 2, MPI_INT, 0, MPI_COMM_WORLD);
+   // MPI_Bcast(p_buffer, 2, MPI_INT, 0, MPI_COMM_WORLD);
 
     //printf("%d: first item is %d\n", my_rank, p_buffer[1]);
 
