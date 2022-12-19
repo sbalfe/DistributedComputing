@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
 
    // MPI_Bcast(p_buffer, 2, MPI_INT, 0, MPI_COMM_WORLD);
 
-    //printf("%d: first item is %d\n", my_rank, p_buffer[1]);
+    printf("%d: first item is %d\n", my_rank, p_buffer[1]);
 
 
     name_len = MPI_MAX_PROCESSOR_NAME;
