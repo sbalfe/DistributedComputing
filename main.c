@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
     int *p_buffer = NULL;
     p_buffer = malloc(sizeof(int) * 2);
 
-    if (my_rank == 0){
+    if (my_rank == 17){
         p_buffer[0] = 1;
         p_buffer[1] = 2;
     }
