@@ -1,13 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <mpi.h>
 
 // test
 
+typedef struct context context;
 
-typedef struct context {
-
-} context_t ;
+struct context {
+    context *p_next;
+};
 
 int main(int argc, char **argv) {
 
@@ -26,17 +28,10 @@ int main(int argc, char **argv) {
     MPI_Comm_size(MPI_COMM_WORLD, &n_processors);
 
     int *p_send_buffer = NULL;
-    p_send_buffer = malloc(sizeof(int) * 2);
+    p_send_buffer = calloc(16, sizeof(int));
 
     int *p_receive_value = NULL;
     p_receive_value = malloc(sizeof(int));
-
-    if (my_rank == 1){
-        p_send_buffer[0] = 1;
-        p_send_buffer[1] = 2;
-        p_send_buffer[1] = 3;
-        p_send_buffer[1] = 4;
-    }
 
     MPI_Scatter(p_send_buffer, 1 , MPI_INT, p_receive_value, 1, MPI_INT, 1, MPI_COMM_WORLD);
 
