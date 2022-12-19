@@ -116,11 +116,6 @@
 			"isCMake" : true,
 			"isExternal" : true,
 			"path" : "/var/lib/snapd/snap/clion/218/bin/cmake/linux/share/cmake-3.24/Modules/FindMPI/test_mpi.c"
-		},
-		{
-			"isCMake" : true,
-			"isExternal" : true,
-			"path" : "/var/lib/snapd/snap/clion/218/bin/cmake/linux/share/cmake-3.24/Modules/FindMPI/test_mpi.c"
 		}
 	],
 	"kind" : "cmakeFiles",
