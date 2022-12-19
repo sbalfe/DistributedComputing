@@ -28,13 +28,17 @@ int main(int argc, char **argv) {
     MPI_Comm_size(MPI_COMM_WORLD, &n_processors);
 
     int *p_send_buffer = calloc(n_processors, sizeof(int));
+    p_send_buffer[0] = 1;
+    p_send_buffer[1] = 2;
+    p_send_buffer[n_processors - 2] = 12;
+    p_send_buffer[n_processors - 1] = 10;
 
     int *p_receive_value = NULL;
     p_receive_value = malloc(sizeof(int));
 
-    MPI_Scatter(p_send_buffer, 1 , MPI_INT, p_receive_value, 1, MPI_INT, 1, MPI_COMM_WORLD);
+    MPI_Scatter(p_send_buffer, 4 , MPI_INT, p_receive_value, 4, MPI_INT, 1, MPI_COMM_WORLD);
 
-    printf("%d: hey the second value is %d\n", my_rank, *p_receive_value);
+    printf("%d: hey the second value is %d\n", my_rank, p_receive_value[0]);
 
     name_len = MPI_MAX_PROCESSOR_NAME;
     MPI_Get_processor_name(name, &name_len);
