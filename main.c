@@ -28,8 +28,8 @@ int main(int argc, char **argv) {
 
     if (my_rank == 0){
         p_buffer = malloc(sizeof(int) * 2);
-        p_buffer[0] = 1;
-        p_buffer[1] = 2;
+        //p_buffer[0] = 1;
+        //p_buffer[1] = 2;
     }
 
     MPI_Bcast(p_buffer, 2, MPI_INT, 0, MPI_COMM_WORLD);
