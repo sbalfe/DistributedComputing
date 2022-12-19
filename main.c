@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
 
     MPI_Scatter(p_send_buffer, 1 , MPI_INT, p_receive_value, 1, MPI_INT, 1, MPI_COMM_WORLD);
 
-    printf("%d: hey the second value is %d\n", my_rank, p_receive_value[1]);
+    printf("%d: hey the second value is %d\n", my_rank, p_receive_value[0]);
 
     name_len = MPI_MAX_PROCESSOR_NAME;
     MPI_Get_processor_name(name, &name_len);
