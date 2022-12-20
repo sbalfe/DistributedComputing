@@ -80,6 +80,16 @@
 				"backtrace" : 2,
 				"fragment" : "/usr/lib/libmpi.so",
 				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "-ldl",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "-lm",
+				"role" : "libraries"
 			}
 		],
 		"language" : "C"

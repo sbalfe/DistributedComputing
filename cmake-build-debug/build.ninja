@@ -65,7 +65,7 @@ build CMakeFiles/DistributedComputing.dir/main.c.o: C_COMPILER__DistributedCompu
 
 build DistributedComputing: C_EXECUTABLE_LINKER__DistributedComputing_Debug CMakeFiles/DistributedComputing.dir/main.c.o | /usr/lib/libmpi.so
   FLAGS = -g
-  LINK_LIBRARIES = /usr/lib/libmpi.so
+  LINK_LIBRARIES = /usr/lib/libmpi.so  -ldl  -lm
   OBJECT_DIR = CMakeFiles/DistributedComputing.dir
   POST_BUILD = :
   PRE_LINK = :
