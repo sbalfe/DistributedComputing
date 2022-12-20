@@ -4,7 +4,6 @@
 #include <mpi.h>
 
 // test
-
 typedef struct context context;
 
 struct context {
