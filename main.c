@@ -47,6 +47,7 @@ int main(int argc, char **argv) {
     }
 
     double *input_buffer = malloc(sizeof(double) * ((size_t) pow(context.array_size,2)));
+    double *final_buffer = malloc(sizeof(double) * ((size_t) pow(context.array_size,2)));
     context.block_size = malloc(sizeof(double) * context.n_processors);
     context.displacements = malloc(sizeof(double) * context.n_processors);
 
@@ -93,17 +94,12 @@ int main(int argc, char **argv) {
                 0, MPI_COMM_WORLD);
 
 
-    if (context.rank == 9){
-        for (uint r = 0; r < context.n_processors; ++r){
-            printf("RANK %u : [",r);
-            for (uint i = 0; i < context.block_size[r]; ++i){
-                printf(" %f, ", context.local_buffer[i]);
-            }
-            printf("]\n");
-        }
-    }
 
 
+    MPI_Gatherv(context.local_buffer, context.block_size[context.rank],
+                MPI_DOUBLE, final_buffer ,(int *) context.block_size, (int *) context.displacements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+    print_array(final_buffer, context.array_size);
 
     MPI_Finalize();
     return 0;
