@@ -12,6 +12,7 @@ struct Context {
     int *block_size;
     int *displacements;
     double *local_buffer;
+    double *input_buffer;
 } typedef context_t;
 
 
