@@ -92,7 +92,10 @@ int main(int argc, char **argv) {
                 context.local_buffer , (int) context.block_size[context.rank], MPI_DOUBLE,
                 0, MPI_COMM_WORLD);
 
-    print_array(context.local_buffer, context.block_size[context.rank]);
+    if (context.rank == 0) {
+        print_array(context.local_buffer, context.block_size[context.rank]);
+    }
+
     MPI_Finalize();
     return 0;
 }
