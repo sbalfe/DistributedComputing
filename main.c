@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
                 remainder--;
             }
             context.displacements[i] = sum;
-            sum += (int) context.block_size[i];
+            sum += context.block_size[i];
         }
     }
 
