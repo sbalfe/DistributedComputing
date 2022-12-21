@@ -92,13 +92,13 @@ int main(int argc, char **argv) {
                 context.local_buffer , (int) context.block_size[context.rank], MPI_DOUBLE,
                 0, MPI_COMM_WORLD);
 
-    if (context.rank == 0) {
-        printf("[");
-        for (uint i = 0; i < context.block_size[context.rank]; ++i){
-            printf(" %f, ", context.local_buffer[i]);
-        }
-        printf("]");
+
+    printf("[");
+    for (uint i = 0; i < context.block_size[context.rank]; ++i){
+        printf(" %f, ", context.local_buffer[i]);
     }
+    printf("]");
+
 
     MPI_Finalize();
     return 0;
