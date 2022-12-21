@@ -99,7 +99,9 @@ int main(int argc, char **argv) {
     MPI_Gatherv(context.local_buffer, context.block_size[context.rank],
                 MPI_DOUBLE, final_buffer ,(int *) context.block_size, (int *) context.displacements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-    print_array(final_buffer, context.array_size);
+    if (context.rank == 0) {
+        print_array(final_buffer, context.array_size);
+    }
 
     MPI_Finalize();
     return 0;
