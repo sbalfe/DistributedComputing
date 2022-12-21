@@ -28,24 +28,26 @@ void print_array(void* arr, uint arrSize) {
 
 int main(int argc, char **argv) {
 
+
     printf("test");
-//    int rc = MPI_Init(&argc, &argv);
-//    int name_len;
-//
-//    context_t context;
-//    context.array_size = (int) strtol(argv[1], 0,10);
-//    context.precision = strtof(argv[2], 0);
-//
-//    MPI_Comm_rank(MPI_COMM_WORLD, &context.rank);
-//    MPI_Comm_size(MPI_COMM_WORLD, &context.n_processors);
-//
-//    char name[MPI_MAX_PROCESSOR_NAME];
-//
-//    if (rc != MPI_SUCCESS) {
-//        printf("Error starting MPI test program\n");
-//        MPI_Abort(MPI_COMM_WORLD, rc);
-//    }
-//
+    int rc = MPI_Init(&argc, &argv);
+    int name_len;
+
+    context_t context;
+    context.array_size = (int) strtol(argv[1], 0,10);
+    context.precision = strtof(argv[2], 0);
+
+    MPI_Comm_rank(MPI_COMM_WORLD, &context.rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &context.n_processors);
+
+    char name[MPI_MAX_PROCESSOR_NAME];
+
+    if (rc != MPI_SUCCESS) {
+        printf("Error starting MPI test program\n");
+        MPI_Abort(MPI_COMM_WORLD, rc);
+    }
+    printf("test");
+
 //    double *input_buffer = malloc(sizeof(double) * ((size_t) pow(context.array_size,2)));
 //    context.block_size = malloc(sizeof(double) * context.n_processors);
 //
