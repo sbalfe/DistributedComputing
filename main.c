@@ -93,9 +93,9 @@ int main(int argc, char **argv) {
                 0, MPI_COMM_WORLD);
 
 
-    if (context.rank == 0){
+    if (context.rank == 6){
         for (uint r = 0; r < context.n_processors; ++r){
-            printf("RANK %u : [", r);
+            printf("RANK %u : [",r);
             for (uint i = 0; i < context.block_size[r]; ++i){
                 printf(" %f, ", context.local_buffer[i]);
             }
