@@ -93,11 +93,16 @@ int main(int argc, char **argv) {
                 0, MPI_COMM_WORLD);
 
 
-    printf("[");
-    for (uint i = 0; i < context.block_size[context.rank]; ++i){
-        printf(" %f, ", context.local_buffer[i]);
+    if (context.rank == 0){
+        for (uint r = 0; r < context.n_processors; ++r){
+            printf("RANK %u : [", r);
+            for (uint i = 0; i < context.block_size[r]; ++i){
+                printf(" %f, ", context.local_buffer[i]);
+            }
+            printf("]\n");
+        }
     }
-    printf("]");
+
 
 
     MPI_Finalize();
