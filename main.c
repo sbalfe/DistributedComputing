@@ -36,17 +36,42 @@ double set_average(double const *arr, int y, int x, uint arrSize){
     return (above + left + below + right) / 4;
 }
 
+void array_passthrough(context_t *context){
+
+    int array_offset = context->displacements[context->rank];
+
+    for (int i = 0; i < context->block_size[context->rank] ; ++i){
+
+        // figure out what position we are at in the array in terms of rows and columns
+        int y = (array_offset + i) / (int) context->array_size;
+        int x = (array_offset + i) % (int) context->array_size;
+
+        // check for borders
+        if (y == 0 || x == 0 || y == context->array_size - 1 || x == context->array_size - 1){
+            continue;
+        }
+
+        double old_value = context->local_buffer[i];
+        double new_value = set_average(context->input_buffer , y,x, context->array_size);
+        context->local_buffer[i] = new_value;
+
+        if (fabs(new_value - old_value) > context->precision){
+            context->complete = 0;
+        }
+    }
+}
+
 int main(int argc, char **argv) {
 
     int rc = MPI_Init(&argc, &argv);
     int name_len;
 
-    context_t context;
-    context.array_size = (int) strtol(argv[1], 0,10);
-    context.precision = strtof(argv[2], 0);
+    context_t *context = malloc(sizeof(context_t));
+    context->array_size = (int) strtol(argv[1], 0,10);
+    context->precision = strtof(argv[2], 0);
 
-    MPI_Comm_rank(MPI_COMM_WORLD, &context.rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &context.n_processors);
+    MPI_Comm_rank(MPI_COMM_WORLD, &context->rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &context->n_processors);
 
     char name[MPI_MAX_PROCESSOR_NAME];
 
@@ -55,93 +80,73 @@ int main(int argc, char **argv) {
         MPI_Abort(MPI_COMM_WORLD, rc);
     }
 
-    double *input_buffer = malloc(sizeof(double) * ((size_t) pow(context.array_size,2)));
-    double *final_buffer = malloc(sizeof(double) * ((size_t) pow(context.array_size,2)));
-    context.block_size = malloc(sizeof(double) * context.n_processors);
-    context.displacements = malloc(sizeof(double) * context.n_processors);
 
-    uint remainder = (uint) (pow(context.array_size,2)) % context.n_processors;
+    context->block_size = malloc(sizeof(double) * context->n_processors);
+    context->displacements = malloc(sizeof(double) * context->n_processors);
+    context->input_buffer = malloc(sizeof(double) * ((size_t) pow(context->array_size,2)));
+
+    uint remainder = (uint) (pow(context->array_size,2)) % context->n_processors;
 
     int sum = 0;
-    if (context.rank == 0) {
-        for (uint i = 0; i < context.n_processors; ++i) {
-            context.block_size[i] = (int) (pow(context.array_size,2)) / context.n_processors;
+    if (context->rank == 0) {
+        for (uint i = 0; i < context->n_processors; ++i) {
+            context->block_size[i] = (int) (pow(context->array_size,2)) / context->n_processors;
             if (remainder > 0) {
-                context.block_size[i]++;
+                context->block_size[i]++;
                 remainder--;
             }
-            context.displacements[i] = sum;
-            sum += context.block_size[i];
+            context->displacements[i] = sum;
+            sum += context->block_size[i];
         }
     }
 
-    MPI_Bcast(context.block_size, context.n_processors, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(context->block_size, context->n_processors, MPI_INT, 0, MPI_COMM_WORLD);
 
-    context.local_buffer = malloc(sizeof(double) * context.block_size[context.rank]);
+    context->local_buffer = malloc(sizeof(double) * context->block_size[context->rank]);
 
-    // make one processor allocate the array.
-    if (context.rank == 0) {
-        for (int y = 0; y < context.array_size; ++y) {
+    // make one processor allocate the array
+    if (context->rank == 0) {
+        for (int y = 0; y < context->array_size; ++y) {
             if (y == 0) {
-                for (int x = 0; x < context.array_size; ++x) {
-                    input_buffer[context.array_size * y + x] = 1;
+                for (int x = 0; x < context->array_size; ++x) {
+                    context->input_buffer[context->array_size * y + x] = 1;
                 }
             } else {
-                for (int x = 0; x < context.array_size; ++x) {
+                for (int x = 0; x < context->array_size; ++x) {
                     if (x == 0) {
-                        input_buffer[context.array_size * y + x] = 1;
+                        context->input_buffer[context->array_size * y + x] = 1;
                     } else {
-                        input_buffer[context.array_size * y + x] = 0;
+                        context->input_buffer[context->array_size * y + x] = 0;
                     }
                 }
             }
         }
     }
 
-    context.complete = 1;
+    context->complete = 1;
 
     while(1) {
-        MPI_Scatterv(input_buffer, (int *) context.block_size, (int *) context.displacements, MPI_DOUBLE,
-                     context.local_buffer, (int) context.block_size[context.rank], MPI_DOUBLE,
+        MPI_Scatterv(context->input_buffer, (int *) context->block_size, (int *) context->displacements, MPI_DOUBLE,
+                     context->local_buffer, (int) context->block_size[context->rank], MPI_DOUBLE,
                      0, MPI_COMM_WORLD);
 
-        int array_offset = context.displacements[context.rank];
+        array_passthrough(context);
 
-        for (int i = 0; i < context.block_size[context.rank] ; ++i){
-
-            /* figure out what position we are at in the array in terms of rows and columns */
-            int y = (array_offset + i) / (int) context.array_size;
-            int x = (array_offset + i) % (int) context.array_size;
-
-            // check for borders
-            if (y == 0 || x == 0 || y == context.array_size - 1 || x == context.array_size - 1){
-                continue;
-            }
-
-            double old_value = context.local_buffer[i];
-            double new_value = set_average(input_buffer , y,x, context.array_size);
-            context.local_buffer[i] = new_value;
-
-            if (fabs(new_value - old_value) > context.precision){
-                context.complete = 0;
-            }
-        }
-
-        MPI_Gatherv(context.local_buffer, context.block_size[context.rank],
-                    MPI_DOUBLE, input_buffer, (int *) context.block_size, (int *) context.displacements,
+        MPI_Gatherv(context->local_buffer, context->block_size[context->rank],
+                    MPI_DOUBLE, context->input_buffer, (int *) context->block_size, (int *) context->displacements,
                     MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-        if (context.complete == 0) {
-            context.complete = 1;
-            MPI_Bcast(&context.complete, 1, MPI_INT, context.rank, MPI_COMM_WORLD);
+        if (context->complete == 0) {
+            context->complete = 1;
+            MPI_Bcast(&context->complete, 1, MPI_INT, context->rank, MPI_COMM_WORLD);
         }
         else {
             break;
         }
     }
 
-    if (context.rank == 0) {
-        print_array(input_buffer, context.array_size);
+    if (context->rank == 0) {
+        print_array(context->input_buffer, context->array_size);
     }
 
     MPI_Finalize();
