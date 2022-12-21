@@ -9,8 +9,8 @@ struct Context {
     int n_processors;
     int rank;
     double precision;
-    uint *block_size;
-    int *displacemnts;
+    int *block_size;
+    int *displacements;
     double *local_buffer;
 } typedef context_t;
 
@@ -48,24 +48,24 @@ int main(int argc, char **argv) {
 
     double *input_buffer = malloc(sizeof(double) * ((size_t) pow(context.array_size,2)));
     context.block_size = malloc(sizeof(double) * context.n_processors);
-    context.displacemnts = malloc(sizeof(double) * context.n_processors);
+    context.displacements = malloc(sizeof(double) * context.n_processors);
 
     uint remainder = (uint) (pow(context.array_size,2)) % context.n_processors;
 
     int sum = 0;
     if (context.rank == 0) {
         for (uint i = 0; i < context.n_processors; ++i) {
-            context.block_size[i] = (uint) (pow(context.array_size,2)) / context.n_processors;
+            context.block_size[i] =  (int)(pow(context.array_size,2)) / context.n_processors;
             if (remainder > 0) {
                 context.block_size[i]++;
                 remainder--;
             }
-            context.displacemnts[i] = sum;
+            context.displacements[i] = sum;
             sum += (int) context.block_size[i];
         }
     }
 
-    MPI_Bcast(context.block_size, context.n_processors, MPI_UNSIGNED, 0, MPI_COMM_WORLD);
+    MPI_Bcast(context.block_size, context.n_processors, MPI_INT, 0, MPI_COMM_WORLD);
 
     context.local_buffer = malloc(sizeof(double) * context.block_size[context.rank]);
 
@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    MPI_Scatterv(input_buffer, (int *) context.block_size , (int *) context.displacemnts, MPI_DOUBLE,
+    MPI_Scatterv(input_buffer, (int *) context.block_size , (int *) context.displacements, MPI_DOUBLE,
                 context.local_buffer , (int) context.block_size[context.rank], MPI_DOUBLE,
                 0, MPI_COMM_WORLD);
 
