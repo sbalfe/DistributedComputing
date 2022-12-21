@@ -28,8 +28,6 @@ void print_array(void* arr, uint arrSize) {
 
 int main(int argc, char **argv) {
 
-
-    printf("test");
     int rc = MPI_Init(&argc, &argv);
     int name_len;
 
@@ -46,53 +44,52 @@ int main(int argc, char **argv) {
         printf("Error starting MPI test program\n");
         MPI_Abort(MPI_COMM_WORLD, rc);
     }
-    printf("test");
 
-//    double *input_buffer = malloc(sizeof(double) * ((size_t) pow(context.array_size,2)));
-//    context.block_size = malloc(sizeof(double) * context.n_processors);
-//
-//    uint operations = (uint) (pow(context.array_size,2)) / context.n_processors;
-//    uint remainder = (uint) (pow(context.array_size,2)) % context.n_processors;
-//
-//    if (context.rank == 0) {
-//        for (uint i = 0; i < context.n_processors; ++i) {
-//            if (remainder != 0) {
-//                context.block_size[i] = operations + 1;
-//                remainder--;
-//            } else {
-//                context.block_size[i] = operations;
-//            }
-//        }
-//    }
-//
-//    MPI_Bcast(context.block_size, context.n_processors, MPI_UNSIGNED, 0, MPI_COMM_WORLD);
-//
-//    context.local_buffer = malloc(sizeof(double) * context.block_size[context.rank]);
-//
-//    // make one processor allocate the array.
-//    if (context.rank == 0) {
-//        for (int y = 0; y < context.array_size; ++y) {
-//            if (y == 0) {
-//                for (int x = 0; x < context.array_size; ++x) {
-//                    input_buffer[context.array_size * y + x] = 1;
-//                }
-//            } else {
-//                for (int x = 0; x < context.array_size; ++x) {
-//                    if (x == 0) {
-//                        input_buffer[context.array_size * y + x] = 1;
-//                    } else {
-//                        input_buffer[context.array_size * y + x] = 0;
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    MPI_Scatter(input_buffer, (int) pow(context.array_size,2) , MPI_DOUBLE,
-//                context.local_buffer , (int) context.block_size[context.rank], MPI_DOUBLE,
-//                0, MPI_COMM_WORLD);
-//
-//    print_array(context.local_buffer, context.array_size);
-//    MPI_Finalize();
+    double *input_buffer = malloc(sizeof(double) * ((size_t) pow(context.array_size,2)));
+    context.block_size = malloc(sizeof(double) * context.n_processors);
+
+    uint operations = (uint) (pow(context.array_size,2)) / context.n_processors;
+    uint remainder = (uint) (pow(context.array_size,2)) % context.n_processors;
+
+    if (context.rank == 0) {
+        for (uint i = 0; i < context.n_processors; ++i) {
+            if (remainder != 0) {
+                context.block_size[i] = operations + 1;
+                remainder--;
+            } else {
+                context.block_size[i] = operations;
+            }
+        }
+    }
+
+    MPI_Bcast(context.block_size, context.n_processors, MPI_UNSIGNED, 0, MPI_COMM_WORLD);
+
+    context.local_buffer = malloc(sizeof(double) * context.block_size[context.rank]);
+
+    // make one processor allocate the array.
+    if (context.rank == 0) {
+        for (int y = 0; y < context.array_size; ++y) {
+            if (y == 0) {
+                for (int x = 0; x < context.array_size; ++x) {
+                    input_buffer[context.array_size * y + x] = 1;
+                }
+            } else {
+                for (int x = 0; x < context.array_size; ++x) {
+                    if (x == 0) {
+                        input_buffer[context.array_size * y + x] = 1;
+                    } else {
+                        input_buffer[context.array_size * y + x] = 0;
+                    }
+                }
+            }
+        }
+    }
+
+    MPI_Scatter(input_buffer, (int) pow(context.array_size,2) , MPI_DOUBLE,
+                context.local_buffer , (int) context.block_size[context.rank], MPI_DOUBLE,
+                0, MPI_COMM_WORLD);
+
+    print_array(context.local_buffer, context.array_size);
+    MPI_Finalize();
     return 0;
 }
