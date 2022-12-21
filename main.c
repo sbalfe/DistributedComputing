@@ -93,8 +93,9 @@ int main(int argc, char **argv) {
                 context.local_buffer , (int) context.block_size[context.rank], MPI_DOUBLE,
                 0, MPI_COMM_WORLD);
 
-
-
+    if (context.rank == 0){
+        context.local_buffer[0] = 3;
+    }
 
     MPI_Gatherv(context.local_buffer, context.block_size[context.rank],
                 MPI_DOUBLE, final_buffer ,(int *) context.block_size, (int *) context.displacements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
