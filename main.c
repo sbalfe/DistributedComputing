@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
                 context.local_buffer , (int) context.block_size[context.rank], MPI_DOUBLE,
                 0, MPI_COMM_WORLD);
 
-    if (context.rank == 0){
+    if (context.rank == 6){
         context.local_buffer[0] = 3;
     }
 
