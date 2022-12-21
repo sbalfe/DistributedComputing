@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
     int sum = 0;
     if (context.rank == 0) {
         for (uint i = 0; i < context.n_processors; ++i) {
-            context.block_size[i] =  (int)(pow(context.array_size,2)) / context.n_processors;
+            context.block_size[i] = (int) (pow(context.array_size,2)) / context.n_processors;
             if (remainder > 0) {
                 context.block_size[i]++;
                 remainder--;
@@ -93,7 +93,11 @@ int main(int argc, char **argv) {
                 0, MPI_COMM_WORLD);
 
     if (context.rank == 0) {
-        print_array(context.local_buffer, context.block_size[context.rank]);
+        printf("[");
+        for (uint i = 0; i < context.block_size[context.rank]; ++i){
+            printf(" %f, ", context.local_buffer[i]);
+        }
+        printf("]");
     }
 
     MPI_Finalize();
