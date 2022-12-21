@@ -85,7 +85,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    MPI_Scatter(input_buffer, (int) pow(context.array_size,2) , MPI_DOUBLE,
+    MPI_Scatter(input_buffer, (int) context.block_size[context.rank] , MPI_DOUBLE,
                 context.local_buffer , (int) context.block_size[context.rank], MPI_DOUBLE,
                 0, MPI_COMM_WORLD);
 
