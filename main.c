@@ -13,19 +13,27 @@ struct Context {
     int *displacements;
     double *local_buffer;
     double *input_buffer;
+    int complete;
 } typedef context_t;
 
 
 void print_array(void* arr, uint arrSize) {
-
     double *array = (double *) arr;
     for (uint y = 0; y < arrSize; ++y) {
-
         for (int x = 0; x < arrSize; ++x) {
             printf("%f ", array[arrSize * y + x]);
         }
         printf("\n");
     }
+}
+
+double set_average(double const *arr, int y, int x, uint arrSize){
+    double above = arr[arrSize * (y-1) + x];
+    double left = arr[arrSize * y + (x-1)];
+    double below = arr[arrSize * (y+1) + x];
+    double right = arr[arrSize * y + (x+1)];
+
+    return (above + left + below + right) / 4;
 }
 
 int main(int argc, char **argv) {
@@ -90,19 +98,50 @@ int main(int argc, char **argv) {
         }
     }
 
-    MPI_Scatterv(input_buffer, (int *) context.block_size , (int *) context.displacements, MPI_DOUBLE,
-                context.local_buffer , (int) context.block_size[context.rank], MPI_DOUBLE,
-                0, MPI_COMM_WORLD);
+    context.complete = 1;
 
-    if (context.rank == 6){
-        context.local_buffer[0] = 3;
+    while(1) {
+        MPI_Scatterv(input_buffer, (int *) context.block_size, (int *) context.displacements, MPI_DOUBLE,
+                     context.local_buffer, (int) context.block_size[context.rank], MPI_DOUBLE,
+                     0, MPI_COMM_WORLD);
+
+        int array_offset = context.displacements[context.rank];
+
+        for (int i = 0; i < context.block_size[context.rank] ; ++i){
+
+            /* figure out what position we are at in the array in terms of rows and columns */
+            int y = (array_offset + i) / (int) context.array_size;
+            int x = (array_offset + i) % (int) context.array_size;
+
+            // check for borders
+            if (y == 0 || x == 0 || y == context.array_size - 1 || x == context.array_size - 1){
+                continue;
+            }
+
+            double old_value = context.local_buffer[i];
+            double new_value = set_average(input_buffer , y,x, context.array_size);
+            context.local_buffer[i] = new_value;
+
+            if (fabs(new_value - old_value) > context.precision){
+                context.complete = 0;
+            }
+        }
+
+        MPI_Gatherv(context.local_buffer, context.block_size[context.rank],
+                    MPI_DOUBLE, input_buffer, (int *) context.block_size, (int *) context.displacements,
+                    MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+        if (context.complete == 0) {
+            context.complete = 1;
+            MPI_Bcast(&context.complete, 1, MPI_INT, context.rank, MPI_COMM_WORLD);
+        }
+        else {
+            break;
+        }
     }
 
-    MPI_Gatherv(context.local_buffer, context.block_size[context.rank],
-                MPI_DOUBLE, final_buffer ,(int *) context.block_size, (int *) context.displacements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-
     if (context.rank == 0) {
-        print_array(final_buffer, context.array_size);
+        print_array(input_buffer, context.array_size);
     }
 
     MPI_Finalize();
