@@ -109,6 +109,7 @@ int main(int argc, char **argv) {
     }
 
     MPI_Bcast(context->block_size, context->n_processors, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(context->displacements, context->n_processors, MPI_INT, 0, MPI_COMM_WORLD);
 
     if (context->rank == 6){
         printf("displacement value: %d\n", context->displacements[context->rank]);
