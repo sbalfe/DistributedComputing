@@ -63,22 +63,22 @@ void array_passthrough(context_t *context){
 
 int main(int argc, char **argv) {
 
-    int rc = MPI_Init(&argc, &argv);
-    if (rc != MPI_SUCCESS) {
-        printf("Error starting MPI test program\n");
-        MPI_Abort(MPI_COMM_WORLD, rc);
-    }
-
-    int name_len;
-
-    context_t *context = malloc(sizeof(context_t));
-    context->array_size = (int) strtol(argv[1], 0,10);
-    context->precision = strtof(argv[2], 0);
-
-    MPI_Comm_rank(MPI_COMM_WORLD, &context->rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &context->n_processors);
-
-    char name[MPI_MAX_PROCESSOR_NAME];
+//    int rc = MPI_Init(&argc, &argv);
+//    if (rc != MPI_SUCCESS) {
+//        printf("Error starting MPI test program\n");
+//        MPI_Abort(MPI_COMM_WORLD, rc);
+//    }
+//
+//    int name_len;
+//
+//    context_t *context = malloc(sizeof(context_t));
+//    context->array_size = (int) strtol(argv[1], 0,10);
+//    context->precision = strtof(argv[2], 0);
+//
+//    MPI_Comm_rank(MPI_COMM_WORLD, &context->rank);
+//    MPI_Comm_size(MPI_COMM_WORLD, &context->n_processors);
+//
+//    char name[MPI_MAX_PROCESSOR_NAME];
 
 
 //    context->block_size = malloc((ssize_t) sizeof(double) * context->n_processors);
