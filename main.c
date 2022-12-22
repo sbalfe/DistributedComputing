@@ -136,10 +136,8 @@ int main(int argc, char **argv) {
         }
     }
 
-    context->complete = 0;
-    if (context->rank == 0) {
-        context->complete = 1;
-    }
+
+    context->complete = 1;
 
     MPI_Bcast(&context->complete, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
@@ -156,18 +154,13 @@ int main(int argc, char **argv) {
                     (int*) context->block_size, (int*)context->displacements,
                     MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-        if (context->rank == 0) {
-            print_array(context->input_buffer, context->array_size);
+        if (context->complete == 0) {
+            context->complete = 1;
+            MPI_Bcast(&context->complete, 1, MPI_INT, context->rank, MPI_COMM_WORLD);
         }
-        break;
-
-//        if (context->complete == 0) {
-//            context->complete = 1;
-//            MPI_Bcast(&context->complete, 1, MPI_INT, context->rank, MPI_COMM_WORLD);
-//        }
-//        else {
-//            break;
-//        }
+        else {
+            break;
+        }
     }
 
     if (context->rank == 0) {
