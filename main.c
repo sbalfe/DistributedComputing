@@ -130,25 +130,32 @@ int main(int argc, char **argv) {
 
 
 
-//    while(1) {
+   while(1) {
         MPI_Scatterv(context->input_buffer, (int *) context->block_size, (int *) context->displacements, MPI_DOUBLE,
                      context->local_buffer, (int) context->block_size[context->rank], MPI_DOUBLE,
                      0, MPI_COMM_WORLD);
 
         array_passthrough(context);
-
+        if (context->rank == 0) {
         MPI_Gatherv(context->local_buffer, context->block_size[context->rank],
-                    MPI_DOUBLE, context->input_buffer, (int *) context->block_size, (int *) context->displacements,
+                    MPI_DOUBLE, context->input_buffer,
+                    (int*)context->block_size, (int*)context->displacements,
                     MPI_DOUBLE, 0, MPI_COMM_WORLD);
+        } else {
+        MPI_Gatherv(context->local_buffer, context->block_size[context->rank],
+                    MPI_DOUBLE, NULL,
+                    (int*)context->block_size, (int*)context->displacements,
+                    MPI_DOUBLE, 0, MPI_COMM_WORLD);
+        }
 
         if (context->complete == 0) {
             context->complete = 1;
             MPI_Bcast(&context->complete, 1, MPI_INT, context->rank, MPI_COMM_WORLD);
         }
         else {
-            //break;
+            break;
         }
-//    }
+    }
 
     if (context->rank == 0) {
         print_array(context->input_buffer, context->array_size);
