@@ -1,97 +1,96 @@
 #include <stdio.h>
-//#include <stdlib.h>
-//#include <string.h>
-//#include <math.h>
+#include <stdlib.h>
+#include <math.h>
 #include <mpi.h>
-//
-//struct Context {
-//    uint array_size;
-//    int n_processors;
-//    int rank;
-//    double precision;
-//    int *block_size;
-//    int *displacements;
-//    double *local_buffer;
-//    double *input_buffer;
-//    int complete;
-//} typedef context_t;
-//
-//
-//void print_array(void* arr, uint arrSize) {
-//    double *array = (double *) arr;
-//    for (uint y = 0; y < arrSize; ++y) {
-//        for (int x = 0; x < arrSize; ++x) {
-//            printf("%f ", array[arrSize * y + x]);
-//        }
-//        printf("\n");
-//    }
-//}
-//
-//double set_average(const double *arr, int y, int x, uint arrSize){
-//    double above = arr[arrSize * (y-1) + x];
-//    double left = arr[arrSize * y + (x-1)];
-//    double below = arr[arrSize * (y+1) + x];
-//    double right = arr[arrSize * y + (x+1)];
-//
-//    return (double) (above + left + below + right) / (double) 4;
-//}
-//
-//void array_passthrough(context_t *context){
-//
-//    int array_offset = context->displacements[context->rank];
-//
-//    for (int i = 0; i < context->block_size[context->rank] ; ++i){
-//
-//        // figure out what position we are at in the array in terms of rows and columns
-//        int y = (array_offset + i) / (int) context->array_size;
-//        int x = (array_offset + i) % (int) context->array_size;
-//
-//        // check for borders
-//        if (y == 0 || x == 0 || y == context->array_size - 1 || x == context->array_size - 1){
-//            continue;
-//        }
-//
-//        double old_value = context->local_buffer[i];
-//        double new_value = set_average(context->input_buffer , y,x, context->array_size);
-//        context->local_buffer[i] = new_value;
-//
-//        if (fabs(new_value - old_value) > context->precision){
-//            context->complete = 0;
-//        }
-//    }
-//}
+
+struct Context {
+    uint array_size;
+    int n_processors;
+    int rank;
+    double precision;
+    int *block_size;
+    int *displacements;
+    double *local_buffer;
+    double *input_buffer;
+    int complete;
+} typedef context_t;
+
+
+void print_array(void* arr, uint arrSize) {
+    double *array = (double *) arr;
+    for (uint y = 0; y < arrSize; ++y) {
+        for (int x = 0; x < arrSize; ++x) {
+            printf("%f ", array[arrSize * y + x]);
+        }
+        printf("\n");
+    }
+}
+
+double set_average(const double *arr, int y, int x, uint arrSize){
+    double above = arr[arrSize * (y-1) + x];
+    double left = arr[arrSize * y + (x-1)];
+    double below = arr[arrSize * (y+1) + x];
+    double right = arr[arrSize * y + (x+1)];
+
+    return (double) (above + left + below + right) / (double) 4;
+}
+
+void array_passthrough(context_t *context){
+
+    int array_offset = context->displacements[context->rank];
+
+    for (int i = 0; i < context->block_size[context->rank] ; ++i){
+
+        // figure out what position we are at in the array in terms of rows and columns
+        int y = (array_offset + i) / (int) context->array_size;
+        int x = (array_offset + i) % (int) context->array_size;
+
+        // check for borders
+        if (y == 0 || x == 0 || y == context->array_size - 1 || x == context->array_size - 1){
+            continue;
+        }
+
+        double old_value = context->local_buffer[i];
+        double new_value = set_average(context->input_buffer , y,x, context->array_size);
+        context->local_buffer[i] = new_value;
+
+        if (fabs(new_value - old_value) > context->precision){
+            context->complete = 0;
+        }
+    }
+}
 
 int main(int argc, char **argv) {
 
-      // Initialize the MPI environment
-      MPI_Init(NULL, NULL);
+//      // Initialize the MPI environment
+//      MPI_Init(NULL, NULL);
+//
+//      // Get the number of processes
+//      int world_size;
+//      MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+//
+//      // Get the rank of the process
+//      int world_rank;
+//      MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+//
+//      // Get the name of the processor
+//      char processor_name[MPI_MAX_PROCESSOR_NAME];
+//      int name_len;
+//      MPI_Get_processor_name(processor_name, &name_len);
+//
+//      // Print off a hello world message
+//      printf("Hello world from processor %s, rank %d out of %d processors\n",
+//             processor_name, world_rank, world_size);
+//
+//      // Finalize the MPI environment.
+//      MPI_Finalize();
 
-      // Get the number of processes
-      int world_size;
-      MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 
-      // Get the rank of the process
-      int world_rank;
-      MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
-
-      // Get the name of the processor
-      char processor_name[MPI_MAX_PROCESSOR_NAME];
-      int name_len;
-      MPI_Get_processor_name(processor_name, &name_len);
-
-      // Print off a hello world message
-      printf("Hello world from processor %s, rank %d out of %d processors\n",
-             processor_name, world_rank, world_size);
-
-      // Finalize the MPI environment.
-      MPI_Finalize();
-
-
-//    int rc = MPI_Init(&argc, &argv);
-//    if (rc != MPI_SUCCESS) {
-//        printf("Error starting MPI test program\n");
-//        MPI_Abort(MPI_COMM_WORLD, rc);
-//    }
+    int rc = MPI_Init(&argc, &argv);
+    if (rc != MPI_SUCCESS) {
+        printf("Error starting MPI test program\n");
+        MPI_Abort(MPI_COMM_WORLD, rc);
+    }
 //
 //    int name_len;
 //
