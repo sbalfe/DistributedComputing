@@ -62,93 +62,93 @@ void array_passthrough(context_t *context){
 }
 
 int main(int argc, char **argv) {
-    printf("test");
-//    int rc = MPI_Init(&argc, &argv);
-//    if (rc != MPI_SUCCESS) {
-//        printf("Error starting MPI test program\n");
-//        MPI_Abort(MPI_COMM_WORLD, rc);
-//    }
-//
-//    int name_len;
-//
-//    context_t *context = malloc(sizeof(context_t));
-//    context->array_size = (int) strtol(argv[1], 0,10);
-//    context->precision = strtof(argv[2], 0);
-//
-//    MPI_Comm_rank(MPI_COMM_WORLD, &context->rank);
-//    MPI_Comm_size(MPI_COMM_WORLD, &context->n_processors);
-//
-//    char name[MPI_MAX_PROCESSOR_NAME];
+
+    int rc = MPI_Init(&argc, &argv);
+    if (rc != MPI_SUCCESS) {
+        printf("Error starting MPI test program\n");
+        MPI_Abort(MPI_COMM_WORLD, rc);
+    }
+
+    int name_len;
+
+    context_t *context = malloc(sizeof(context_t));
+    context->array_size = (int) strtol(argv[1], 0,10);
+    context->precision = strtof(argv[2], 0);
+
+    MPI_Comm_rank(MPI_COMM_WORLD, &context->rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &context->n_processors);
+
+    char name[MPI_MAX_PROCESSOR_NAME];
 
 
-//    context->block_size = malloc((ssize_t) sizeof(double) * context->n_processors);
-//    context->displacements = malloc((ssize_t) sizeof(double) * context->n_processors);
-//    context->input_buffer = malloc((ssize_t) sizeof(double) * ((ssize_t) pow(context->array_size,2)));
-//
-//    uint remainder = (uint) (pow(context->array_size,2)) % context->n_processors;
-//
-//    int sum = 0;
-//    if (context->rank == 0) {
-//        for (uint i = 0; i < context->n_processors; ++i) {
-//            context->block_size[i] = (int) (pow(context->array_size,2)) / context->n_processors;
-//            if (remainder > 0) {
-//                context->block_size[i]++;
-//                remainder--;
-//            }
-//            context->displacements[i] = sum;
-//            sum += context->block_size[i];
-//        }
-//    }
-//
-//    MPI_Bcast(context->block_size, context->n_processors, MPI_INT, 0, MPI_COMM_WORLD);
-//
-//    context->local_buffer = malloc((ssize_t) sizeof(double) * context->block_size[context->rank]);
-//
-//    // make one processor allocate the array
-//    if (context->rank == 0) {
-//        for (int y = 0; y < context->array_size; ++y) {
-//            if (y == 0) {
-//                for (int x = 0; x < context->array_size; ++x) {
-//                    context->input_buffer[context->array_size * y + x] = 1;
-//                }
-//            } else {
-//                for (int x = 0; x < context->array_size; ++x) {
-//                    if (x == 0) {
-//                        context->input_buffer[context->array_size * y + x] = 1;
-//                    } else {
-//                        context->input_buffer[context->array_size * y + x] = 0;
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    context->complete = 1;
-//
-//    while(1) {
-//        MPI_Scatterv(context->input_buffer, (int *) context->block_size, (int *) context->displacements, MPI_DOUBLE,
-//                     context->local_buffer, (int) context->block_size[context->rank], MPI_DOUBLE,
-//                     0, MPI_COMM_WORLD);
-//
-//        array_passthrough(context);
-//
-//        MPI_Gatherv(context->local_buffer, context->block_size[context->rank],
-//                    MPI_DOUBLE, context->input_buffer, (int *) context->block_size, (int *) context->displacements,
-//                    MPI_DOUBLE, 0, MPI_COMM_WORLD);
-//
-//        if (context->complete == 0) {
-//            context->complete = 1;
-//            MPI_Bcast(&context->complete, 1, MPI_INT, context->rank, MPI_COMM_WORLD);
-//        }
-//        else {
-//            break;
-//        }
-//    }
-//
-//    if (context->rank == 0) {
-//        print_array(context->input_buffer, context->array_size);
-//    }
+    context->block_size = malloc((ssize_t) sizeof(double) * context->n_processors);
+    context->displacements = malloc((ssize_t) sizeof(double) * context->n_processors);
+    context->input_buffer = malloc((ssize_t) sizeof(double) * ((ssize_t) pow(context->array_size,2)));
 
-//    MPI_Finalize();
+    uint remainder = (uint) (pow(context->array_size,2)) % context->n_processors;
+
+    int sum = 0;
+    if (context->rank == 0) {
+        for (uint i = 0; i < context->n_processors; ++i) {
+            context->block_size[i] = (int) (pow(context->array_size,2)) / context->n_processors;
+            if (remainder > 0) {
+                context->block_size[i]++;
+                remainder--;
+            }
+            context->displacements[i] = sum;
+            sum += context->block_size[i];
+        }
+    }
+
+    MPI_Bcast(context->block_size, context->n_processors, MPI_INT, 0, MPI_COMM_WORLD);
+
+    context->local_buffer = malloc((ssize_t) sizeof(double) * context->block_size[context->rank]);
+
+    // make one processor allocate the array
+    if (context->rank == 0) {
+        for (int y = 0; y < context->array_size; ++y) {
+            if (y == 0) {
+                for (int x = 0; x < context->array_size; ++x) {
+                    context->input_buffer[context->array_size * y + x] = 1;
+                }
+            } else {
+                for (int x = 0; x < context->array_size; ++x) {
+                    if (x == 0) {
+                        context->input_buffer[context->array_size * y + x] = 1;
+                    } else {
+                        context->input_buffer[context->array_size * y + x] = 0;
+                    }
+                }
+            }
+        }
+    }
+
+    context->complete = 1;
+
+    while(1) {
+        MPI_Scatterv(context->input_buffer, (int *) context->block_size, (int *) context->displacements, MPI_DOUBLE,
+                     context->local_buffer, (int) context->block_size[context->rank], MPI_DOUBLE,
+                     0, MPI_COMM_WORLD);
+
+        array_passthrough(context);
+
+        MPI_Gatherv(context->local_buffer, context->block_size[context->rank],
+                    MPI_DOUBLE, context->input_buffer, (int *) context->block_size, (int *) context->displacements,
+                    MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+        if (context->complete == 0) {
+            context->complete = 1;
+            MPI_Bcast(&context->complete, 1, MPI_INT, context->rank, MPI_COMM_WORLD);
+        }
+        else {
+            break;
+        }
+    }
+
+    if (context->rank == 0) {
+        print_array(context->input_buffer, context->array_size);
+    }
+
+    MPI_Finalize();
     return 0;
 }
