@@ -42,7 +42,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -fdiagnostics-color=always"
+					"fragment" : "-g -fcolor-diagnostics"
 				},
 				{
 					"fragment" : "-std=gnu2x"
@@ -78,17 +78,17 @@
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "/usr/lib/libmpi.so",
-				"role" : "libraries"
-			},
-			{
-				"backtrace" : 2,
-				"fragment" : "-ldl",
+				"fragment" : "/usr/lib64/libmpi.so",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 2,
 				"fragment" : "-lm",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "-ldl",
 				"role" : "libraries"
 			}
 		],

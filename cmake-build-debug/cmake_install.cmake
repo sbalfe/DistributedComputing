@@ -1,4 +1,4 @@
-# Install script for directory: /home/shriller44/university/University/ParallelComputing-CM30225/Coursework/DistributedComputing
+# Install script for directory: /home/shriller44/university/DistributedComputing
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/shriller44/university/University/ParallelComputing-CM30225/Coursework/DistributedComputing/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/shriller44/university/DistributedComputing/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
