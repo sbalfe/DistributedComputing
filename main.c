@@ -109,7 +109,7 @@ int main(int argc, char **argv) {
 
     MPI_Bcast(context->block_size, context->n_processors, MPI_INT, 0, MPI_COMM_WORLD);
 
-    if (context->rank == 3){
+    if (context->rank == 6){
         printf("displacement value: %d\n", context->displacements[context->rank]);
         printf("processor count: %d\n", context->n_processors);
     }
@@ -143,7 +143,6 @@ int main(int argc, char **argv) {
                      0, MPI_COMM_WORLD);
 
         array_passthrough(context);
-        if (context->rank == 3) context->local_buffer[3] = 15;
 
         if (context->rank == 0) {
         MPI_Gatherv(context->local_buffer, context->block_size[context->rank],
