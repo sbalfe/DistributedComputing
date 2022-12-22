@@ -94,8 +94,8 @@ int main(int argc, char **argv) {
 
     uint remainder = (uint) (pow(context->array_size,2)) % context->n_processors;
 
-    int sum = 0;
     if (context->rank == 0) {
+        int sum = 0;
         for (uint i = 0; i < context->n_processors; ++i) {
             context->block_size[i] = (int) (pow(context->array_size,2)) / context->n_processors;
             if (remainder > 0) {
