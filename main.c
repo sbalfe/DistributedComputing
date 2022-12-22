@@ -45,7 +45,7 @@ void array_passthrough(context_t *context){
         int y = (array_offset + i) / (int) context->array_size;
         int x = (array_offset + i) % (int) context->array_size;
 
-        printf("x: %d\n", x);
+        printf("y: %d\n", x);
         // check for borders
         if (y == 0 || x == 0 || y == context->array_size - 1 || x == context->array_size - 1){
             printf("border check succeeded, continuing\n");
