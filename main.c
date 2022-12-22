@@ -39,6 +39,7 @@ void array_passthrough(context_t *context){
 
     int array_offset = context->displacements[context->rank];
 
+    printf("array_offset: %d\n", array_offset);
     for (int i = 0; i < context->block_size[context->rank] ; ++i){
 
         // figure out what position we are at in the array in terms of rows and columns
