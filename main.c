@@ -137,7 +137,7 @@ int main(int argc, char **argv) {
 
         if (context->complete == 0) {
             context->complete = 1;
-            MPI_Bcast(&context->complete, 1, MPI_INT, context->rank, MPI_COMM_WORLD);
+            //MPI_Bcast(&context->complete, 1, MPI_INT, context->rank, MPI_COMM_WORLD);
         }
         else {
             break;
