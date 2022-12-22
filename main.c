@@ -126,7 +126,7 @@ int main(int argc, char **argv) {
                     if (x == 0) {
                         context->input_buffer[context->array_size * y + x] = 1;
                     } else {
-                        context->input_buffer[context->array_size * y + x] = 0;
+                        context->input_buffer[context->array_size * y + x] = 2;
                     }
                 }
             }
