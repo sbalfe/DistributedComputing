@@ -109,6 +109,9 @@ int main(int argc, char **argv) {
 
     MPI_Bcast(context->block_size, context->n_processors, MPI_INT, 0, MPI_COMM_WORLD);
 
+    if (context->rank == 3){
+        printf("displacement value: %d\n", context->displacements[context->rank]);
+    }
     context->local_buffer = malloc((ssize_t) sizeof(double) * context->block_size[context->rank]);
 
     // make one processor allocate the array
