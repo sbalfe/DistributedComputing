@@ -124,11 +124,6 @@ int main(int argc, char **argv) {
 
     context->complete = 1;
 
-    MPI_Scatterv(context->input_buffer, (int *) context->block_size, (int *) context->displacements, MPI_DOUBLE,
-                 context->local_buffer, (int) context->block_size[context->rank], MPI_DOUBLE,
-                 0, MPI_COMM_WORLD);
-
-
 
    while(1) {
         MPI_Scatterv(context->input_buffer, (int *) context->block_size, (int *) context->displacements, MPI_DOUBLE,
@@ -136,6 +131,7 @@ int main(int argc, char **argv) {
                      0, MPI_COMM_WORLD);
 
         array_passthrough(context);
+
         if (context->rank == 0) {
         MPI_Gatherv(context->local_buffer, context->block_size[context->rank],
                     MPI_DOUBLE, context->input_buffer,
