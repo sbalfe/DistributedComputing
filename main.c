@@ -55,6 +55,9 @@ void array_passthrough(context_t *context){
             continue;
         }
 
+        printf("y: %d\n", y);
+        printf("x: %d\n", x);
+
         printf("border check failed, changing value\n");
 
         double old_value = context->local_buffer[i];
