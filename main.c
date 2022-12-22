@@ -62,7 +62,7 @@ void array_passthrough(context_t *context){
 }
 
 int main(int argc, char **argv) {
-
+    printf("test");
 //    int rc = MPI_Init(&argc, &argv);
 //    if (rc != MPI_SUCCESS) {
 //        printf("Error starting MPI test program\n");
