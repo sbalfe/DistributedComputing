@@ -58,7 +58,6 @@ void array_passthrough(context_t *context){
         printf("y: %d\n", y);
         printf("x: %d\n", x);
 
-
         double old_value = context->local_buffer[i];
         double new_value = set_average(context->input_buffer , y,x, context->array_size);
         //printf("changing local buffer value\n");
@@ -92,14 +91,12 @@ int main(int argc, char **argv) {
 
     char name[MPI_MAX_PROCESSOR_NAME];
 
-
     context->block_size = malloc((ssize_t) sizeof(double) * context->n_processors);
     context->displacements = malloc((ssize_t) sizeof(double) * context->n_processors);
     context->input_buffer = malloc((ssize_t) sizeof(double) * ((ssize_t) pow(context->array_size,2)));
 
-    uint remainder = (uint) (pow(context->array_size,2)) % context->n_processors;
-
     if (context->rank == 0) {
+        uint remainder = (uint) (pow(context->array_size,2)) % context->n_processors;
         int sum = 0;
         for (uint i = 0; i < context->n_processors; ++i) {
             context->block_size[i] = (int) (pow(context->array_size,2)) / context->n_processors;
@@ -136,7 +133,6 @@ int main(int argc, char **argv) {
         }
     }
 
-    context->complete = 0;
     if (context->rank == 0) {
         context->complete = 1;
     }
