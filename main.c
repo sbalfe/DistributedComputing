@@ -39,8 +39,8 @@ void array_passthrough(context_t *context){
 
     int array_offset = context->displacements[context->rank];
 
-    printf("rank: %d\n", context->rank);
-    printf("array_offset: %d\n", array_offset);
+   // printf("rank: %d\n", context->rank);
+   // printf("array_offset: %d\n", array_offset);
     for (int i = 0; i < context->block_size[context->rank] ; ++i){
 
         // figure out what position we are at in the array in terms of rows and columns
@@ -55,7 +55,7 @@ void array_passthrough(context_t *context){
             continue;
         }
 
-        printf("border check failed, changing value\n");
+      //  printf("border check failed, changing value\n");
 
         double old_value = context->local_buffer[i];
         double new_value = set_average(context->input_buffer , y,x, context->array_size);
@@ -103,6 +103,7 @@ int main(int argc, char **argv) {
                 remainder--;
             }
             context->displacements[i] = sum;
+            printf("sum: %d\n", sum);
             sum += context->block_size[i];
         }
     }
