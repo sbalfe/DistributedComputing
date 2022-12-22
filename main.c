@@ -136,8 +136,10 @@ int main(int argc, char **argv) {
         }
     }
 
-
-    context->complete = 1;
+    context->complete = 0;
+    if (context->rank == 0) {
+        context->complete = 1;
+    }
 
     MPI_Bcast(&context->complete, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
