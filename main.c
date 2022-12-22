@@ -64,6 +64,11 @@ void array_passthrough(context_t *context){
 int main(int argc, char **argv) {
 
     int rc = MPI_Init(&argc, &argv);
+    if (rc != MPI_SUCCESS) {
+        printf("Error starting MPI test program\n");
+        MPI_Abort(MPI_COMM_WORLD, rc);
+    }
+
     int name_len;
 
     context_t *context = malloc(sizeof(context_t));
@@ -75,10 +80,6 @@ int main(int argc, char **argv) {
 
     char name[MPI_MAX_PROCESSOR_NAME];
 
-    if (rc != MPI_SUCCESS) {
-        printf("Error starting MPI test program\n");
-        MPI_Abort(MPI_COMM_WORLD, rc);
-    }
 
 //    context->block_size = malloc((ssize_t) sizeof(double) * context->n_processors);
 //    context->displacements = malloc((ssize_t) sizeof(double) * context->n_processors);
