@@ -124,25 +124,31 @@ int main(int argc, char **argv) {
 
     context->complete = 1;
 
-    while(1) {
-        MPI_Scatterv(context->input_buffer, (int *) context->block_size, (int *) context->displacements, MPI_DOUBLE,
-                     context->local_buffer, (int) context->block_size[context->rank], MPI_DOUBLE,
-                     0, MPI_COMM_WORLD);
-
-        array_passthrough(context);
-
-        MPI_Gatherv(context->local_buffer, context->block_size[context->rank],
-                    MPI_DOUBLE, context->input_buffer, (int *) context->block_size, (int *) context->displacements,
-                    MPI_DOUBLE, 0, MPI_COMM_WORLD);
-
-        if (context->complete == 0) {
-            context->complete = 1;
-            //MPI_Bcast(&context->complete, 1, MPI_INT, context->rank, MPI_COMM_WORLD);
-        }
-        else {
-            break;
-        }
+    MPI_Scatterv(context->input_buffer, (int *) context->block_size, (int *) context->displacements, MPI_DOUBLE,
+                 context->local_buffer, (int) context->block_size[context->rank], MPI_DOUBLE,
+                 0, MPI_COMM_WORLD);
+    for (int i = 0 ; i < context->block_size[context->rank]; ++i){
+        printf("%f\n", context->local_buffer[i]);
     }
+//    while(1) {
+//        MPI_Scatterv(context->input_buffer, (int *) context->block_size, (int *) context->displacements, MPI_DOUBLE,
+//                     context->local_buffer, (int) context->block_size[context->rank], MPI_DOUBLE,
+//                     0, MPI_COMM_WORLD);
+//
+//        array_passthrough(context);
+//
+//        MPI_Gatherv(context->local_buffer, context->block_size[context->rank],
+//                    MPI_DOUBLE, context->input_buffer, (int *) context->block_size, (int *) context->displacements,
+//                    MPI_DOUBLE, 0, MPI_COMM_WORLD);
+//
+//        if (context->complete == 0) {
+//            context->complete = 1;
+//            //MPI_Bcast(&context->complete, 1, MPI_INT, context->rank, MPI_COMM_WORLD);
+//        }
+//        else {
+//            break;
+//        }
+//    }
 
     if (context->rank == 0) {
         print_array(context->input_buffer, context->array_size);
