@@ -27,13 +27,13 @@ void print_array(void* arr, uint arrSize) {
     }
 }
 
-double set_average(double const *arr, int y, int x, uint arrSize){
+double set_average(const double *arr, int y, int x, uint arrSize){
     double above = arr[arrSize * (y-1) + x];
     double left = arr[arrSize * y + (x-1)];
     double below = arr[arrSize * (y+1) + x];
     double right = arr[arrSize * y + (x+1)];
 
-    return (above + left + below + right) / 4;
+    return (double) (above + left + below + right) / (double) 4;
 }
 
 void array_passthrough(context_t *context){
@@ -149,6 +149,6 @@ int main(int argc, char **argv) {
 //        print_array(context->input_buffer, context->array_size);
 //    }
 
-    MPI_Finalize();
+//    MPI_Finalize();
     return 0;
 }
