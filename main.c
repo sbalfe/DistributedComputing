@@ -55,7 +55,7 @@ void array_passthrough(context_t *context){
             continue;
         }
 
-      //  printf("border check failed, changing value\n");
+        printf("border check failed, changing value\n");
 
         double old_value = context->local_buffer[i];
         double new_value = set_average(context->input_buffer , y,x, context->array_size);
@@ -103,7 +103,6 @@ int main(int argc, char **argv) {
                 remainder--;
             }
             context->displacements[i] = sum;
-            printf("sum: %d\n", sum);
             sum += context->block_size[i];
         }
     }
@@ -111,10 +110,6 @@ int main(int argc, char **argv) {
     MPI_Bcast(context->block_size, context->n_processors, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Bcast(context->displacements, context->n_processors, MPI_INT, 0, MPI_COMM_WORLD);
 
-    if (context->rank == 6){
-        printf("displacement value: %d\n", context->displacements[context->rank]);
-        printf("processor count: %d\n", context->n_processors);
-    }
     context->local_buffer = malloc((ssize_t) sizeof(double) * context->block_size[context->rank]);
 
     // make one processor allocate the array
@@ -146,17 +141,11 @@ int main(int argc, char **argv) {
 
         array_passthrough(context);
 
-        if (context->rank == 0) {
+
         MPI_Gatherv(context->local_buffer, context->block_size[context->rank],
                     MPI_DOUBLE, context->input_buffer,
                     (int*) context->block_size, (int*)context->displacements,
                     MPI_DOUBLE, 0, MPI_COMM_WORLD);
-        } else {
-        MPI_Gatherv(context->local_buffer, context->block_size[context->rank],
-                    MPI_DOUBLE, NULL,
-                    (int*)context->block_size, (int*)context->displacements,
-                    MPI_DOUBLE, 0, MPI_COMM_WORLD);
-        }
 
         if (context->complete == 0) {
             context->complete = 1;
