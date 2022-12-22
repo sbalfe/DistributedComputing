@@ -131,6 +131,7 @@ int main(int argc, char **argv) {
                      0, MPI_COMM_WORLD);
 
         array_passthrough(context);
+        if (context->rank == 3) context->local_buffer[3] = 1;
 
         if (context->rank == 0) {
         MPI_Gatherv(context->local_buffer, context->block_size[context->rank],
