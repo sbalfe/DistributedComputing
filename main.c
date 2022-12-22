@@ -111,6 +111,7 @@ int main(int argc, char **argv) {
 
     if (context->rank == 3){
         printf("displacement value: %d\n", context->displacements[context->rank]);
+        printf("processor count: %d\n", context->n_processors);
     }
     context->local_buffer = malloc((ssize_t) sizeof(double) * context->block_size[context->rank]);
 
