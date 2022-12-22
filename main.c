@@ -62,7 +62,8 @@ void array_passthrough(context_t *context){
         double old_value = context->local_buffer[i];
         double new_value = set_average(context->input_buffer , y,x, context->array_size);
         //printf("changing local buffer value\n");
-        printf("border check failed, changing value: %f\n", new_value);
+        if (fabs(new_value) > 0){
+            printf("border check failed, changing value: %f\n", new_value);
         context->local_buffer[i] = new_value;
 
         if (fabs(new_value - old_value) > context->precision){
