@@ -53,6 +53,7 @@ void array_passthrough(context_t *context){
             printf("border check succeeded, continuing\n");
             continue;
         }
+        printf("border check failed, changing value\n");
 
         double old_value = context->local_buffer[i];
         double new_value = set_average(context->input_buffer , y,x, context->array_size);
