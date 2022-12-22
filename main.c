@@ -48,8 +48,8 @@ void array_passthrough(context_t *context){
 
         // check for borders
         if (y == 0 || x == 0 || y == context->array_size - 1 || x == context->array_size - 1){
-            printf("y: %d\n", y);
-            printf("x: %d\n", x);
+            //printf("y: %d\n", y);
+            //printf("x: %d\n", x);
             //printf("border check succeeded, continuing\n");
             continue;
         }
