@@ -52,6 +52,7 @@ void array_passthrough(context_t *context){
 
         double old_value = context->local_buffer[i];
         double new_value = set_average(context->input_buffer , y,x, context->array_size);
+        printf("changing local buffer value\n");
         context->local_buffer[i] = new_value;
 
         if (fabs(new_value - old_value) > context->precision){
@@ -136,7 +137,7 @@ int main(int argc, char **argv) {
         if (context->rank == 0) {
         MPI_Gatherv(context->local_buffer, context->block_size[context->rank],
                     MPI_DOUBLE, context->input_buffer,
-                    (int*)context->block_size, (int*)context->displacements,
+                    (int*) context->block_size, (int*)context->displacements,
                     MPI_DOUBLE, 0, MPI_COMM_WORLD);
         } else {
         MPI_Gatherv(context->local_buffer, context->block_size[context->rank],
