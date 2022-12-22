@@ -62,8 +62,9 @@ void array_passthrough(context_t *context){
         double old_value = context->local_buffer[i];
         double new_value = set_average(context->input_buffer , y,x, context->array_size);
         //printf("changing local buffer value\n");
-        if (fabs(new_value) > 0){
+        if (fabs(new_value) > 0) {
             printf("border check failed, changing value: %f\n", new_value);
+        }
         context->local_buffer[i] = new_value;
 
         if (fabs(new_value - old_value) > context->precision){
@@ -135,8 +136,12 @@ int main(int argc, char **argv) {
         }
     }
 
-    context->complete = 1;
+    context->complete = 0;
+    if (context->rank == 0) {
+        context->complete = 1;
+    }
 
+    MPI_Bcast(&context->complete, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
    while(1) {
         MPI_Scatterv(context->input_buffer, (int *) context->block_size, (int *) context->displacements, MPI_DOUBLE,
