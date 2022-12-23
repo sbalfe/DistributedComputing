@@ -60,6 +60,8 @@ double set_average(const double *arr, int y, int x, uint arrSize){
     double below = arr[arrSize * (y+1) + x];
     double right = arr[arrSize * y + (x+1)];
 
+    printf("above: %f , left: %f, below: %f, right: %f", above, left, below, right);
+
     return (double) (above + left + below + right) / (double) 4;
 }
 
@@ -77,22 +79,13 @@ void array_passthrough(context_t *context){
 
         // check for borders
         if (y == 0 || x == 0 || y == context->array_size - 1 || x == context->array_size - 1){
-            //printf("y: %d\n", y);
-            //printf("x: %d\n", x);
-            //printf("border check succeeded, continuing\n");
             continue;
         }
 
-        //printf("y: %d\n", y);
-        //printf("x: %d\n", x);
-
         double old_value = context->local_buffer[i];
-        double new_value = set_average(context->input_buffer , y,x, context->array_size);
+        double new_value = set_average(context->input_buffer ,y , x, context->array_size);
 
-        if (fabs(new_value) > 0) {
-            //printf("border check failed, changing value: %f\n", new_value);
-        }
-        context->local_buffer[i] = 4.0;
+        context->local_buffer[i] = new_value;
 
         if (fabs(new_value - old_value) > context->precision){
             context->complete = 0;
@@ -196,11 +189,9 @@ int main(int argc, char **argv) {
         }
     }
 
-
     if (context->rank == 0) {
         print_array(context->input_buffer, context->array_size);
     }
-
 
     MPI_Finalize();
     return 0;
