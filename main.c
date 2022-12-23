@@ -175,15 +175,16 @@ int main(int argc, char **argv) {
         // this to ensure each processor has the latest copy of the array.
         MPI_Bcast(context->input_buffer,  (int) pow(context->array_size,2), MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-        if (context->rank == 0){
-            int result;
-            MPI_Allreduce(&context->complete, &result, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
-            if (result == context->n_processors){
-                context->complete = 1;
-            }
-            else {
-                context->complete = 0;
-            }
+        int result;
+        MPI_Allreduce(&context->complete, &result, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
+
+        printf("reduction result: %d\n", result);
+        if (context->rank == 0) {
+          if (result == context->n_processors) {
+              context->complete = 1;
+          } else {
+              context->complete = 0;
+          }
         }
 
         MPI_Bcast(&context->complete, 1, MPI_INT, 0, MPI_COMM_WORLD);
