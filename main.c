@@ -190,6 +190,7 @@ int main(int argc, char **argv) {
         if (!context->complete){
             printf("testing\n");
             context->complete = 1;
+            break;
         }
         else {
             break;
