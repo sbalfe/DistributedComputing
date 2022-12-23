@@ -141,28 +141,28 @@ int main(int argc, char **argv) {
 
     MPI_Bcast(context->block_size, context->n_processors, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Bcast(context->displacements, context->n_processors, MPI_INT, 0, MPI_COMM_WORLD);
-    printf("test 2\n");
-//    context->local_buffer = malloc((ssize_t) sizeof(double) * context->block_size[context->rank]);
-//
-//    // make one processor allocate the array
-//    if (context->rank == 0) {
-//        for (int y = 0; y < context->array_size; ++y) {
-//            if (y == 0) {
-//                for (int x = 0; x < context->array_size; ++x) {
-//                    context->input_buffer[context->array_size * y + x] = 1;
-//                }
-//            } else {
-//                for (int x = 0; x < context->array_size; ++x) {
-//                    if (x == 0) {
-//                        context->input_buffer[context->array_size * y + x] = 1;
-//                    } else {
-//                        context->input_buffer[context->array_size * y + x] = 2;
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
+
+    context->local_buffer = malloc((ssize_t) sizeof(double) * context->block_size[context->rank]);
+
+    // make one processor allocate the array
+    if (context->rank == 0) {
+        for (int y = 0; y < context->array_size; ++y) {
+            if (y == 0) {
+                for (int x = 0; x < context->array_size; ++x) {
+                    context->input_buffer[context->array_size * y + x] = 1;
+                }
+            } else {
+                for (int x = 0; x < context->array_size; ++x) {
+                    if (x == 0) {
+                        context->input_buffer[context->array_size * y + x] = 1;
+                    } else {
+                        context->input_buffer[context->array_size * y + x] = 2;
+                    }
+                }
+            }
+        }
+    }
+    printf("test 3\n");
 //    if (context->rank == 0) {
 //        context->complete = 1;
 //    }
