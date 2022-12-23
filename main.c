@@ -157,10 +157,9 @@ int main(int argc, char **argv) {
     }
 
     MPI_Bcast(&context->complete, 1, MPI_INT, 0, MPI_COMM_WORLD);
-
     MPI_Bcast(context->input_buffer,  (int) pow(context->array_size,2), MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-   while(1) {
+    while(1) {
         MPI_Scatterv(context->input_buffer, (int *) context->block_size, (int *) context->displacements, MPI_DOUBLE,
                      context->local_buffer, (int) context->block_size[context->rank], MPI_DOUBLE,
                      0, MPI_COMM_WORLD);
@@ -172,13 +171,19 @@ int main(int argc, char **argv) {
                     (int*) context->block_size, (int*)context->displacements,
                     MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-        // all processors could change the complete flag so one rank must check if any are 0, if so then broadcast 1
-
-        // input buffer to read the average is spread out.
+        // the input buffer changes each time and therefore must be broadcast after each gathering
+        // this to ensure each processor has the latest copy of the array.
         MPI_Bcast(context->input_buffer,  (int) pow(context->array_size,2), MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
         if (context->rank == 0){
-            // if any of the processors have 0, then set this to 0 as we are not done, otherwise 1 then broadcast
-            context->complete = 1;
+            int result;
+            MPI_Allreduce(&context->complete, &result, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
+            if (result == context->n_processors){
+                context->complete = 1;
+            }
+            else {
+                context->complete = 0;
+            }
         }
 
         MPI_Bcast(&context->complete, 1, MPI_INT, 0, MPI_COMM_WORLD);
