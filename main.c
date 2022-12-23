@@ -195,5 +195,6 @@ int main(int argc, char **argv) {
         print_array(context->input_buffer, context->array_size);
         MPI_Finalize();
     }
+    MPI_Finalize();
     return 0;
 }
