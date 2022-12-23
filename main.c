@@ -139,11 +139,10 @@ int main(int argc, char **argv) {
         }
     }
 
-    printf("rank: %d", context->rank);
     MPI_Bcast(context->block_size, context->n_processors, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Bcast(context->displacements, context->n_processors, MPI_INT, 0, MPI_COMM_WORLD);
 
-    printf("rank2: %d", context->rank);
+
     context->local_buffer = malloc((ssize_t) sizeof(double) * context->block_size[context->rank]);
 
     // make one processor allocate the array
@@ -166,11 +165,9 @@ int main(int argc, char **argv) {
         context->complete = 1;
     }
 
-    printf("rank3: %d", context->rank);
     MPI_Bcast(&context->complete, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
    while(1) {
-        break;
         MPI_Scatterv(context->input_buffer, (int *) context->block_size, (int *) context->displacements, MPI_DOUBLE,
                      context->local_buffer, (int) context->block_size[context->rank], MPI_DOUBLE,
                      0, MPI_COMM_WORLD);
@@ -192,17 +189,14 @@ int main(int argc, char **argv) {
         MPI_Bcast(&context->complete, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
         if (!context->complete){
-            printf("testing\n");
+
             context->complete = 1;
-            break;
         }
         else {
             break;
         }
-        break;
     }
 
-    printf("rank: %d", context->rank);
 
     if (context->rank == 0) {
         print_array(context->input_buffer, context->array_size);
