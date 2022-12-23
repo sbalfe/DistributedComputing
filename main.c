@@ -177,8 +177,7 @@ int main(int argc, char **argv) {
 
         int result;
         MPI_Allreduce(&context->complete, &result, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
-
-        printf("reduction result on rank %d: %d\n",context->rank, result);
+        MPI_Barrier(MPI_COMM_WORLD);
         if (context->rank == 0) {
           if (result == context->n_processors) {
               context->complete = 1;
