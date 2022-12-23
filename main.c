@@ -164,7 +164,7 @@ int main(int argc, char **argv) {
         context->complete = 1;
     }
 
-    MPI_Bcast(&context->complete, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    //MPI_Bcast(&context->complete, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
    while(1) {
         break;
