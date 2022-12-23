@@ -40,6 +40,7 @@ struct Context {
     int *displacements;
     double *local_buffer;
     double *input_buffer;
+    double *output_buffer;
     int complete;
 } typedef context_t;
 
@@ -122,6 +123,7 @@ int main(int argc, char **argv) {
     context->block_size = malloc((ssize_t) sizeof(double) * context->n_processors);
     context->displacements = malloc((ssize_t) sizeof(double) * context->n_processors);
     context->input_buffer = malloc((ssize_t) sizeof(double) * ((ssize_t) pow(context->array_size,2)));
+    context->output_buffer = malloc((ssize_t) sizeof(double) * ((ssize_t) pow(context->array_size,2)));
 
     if (context->rank == 0) {
         uint remainder = (uint) (pow(context->array_size,2)) % context->n_processors;
@@ -164,6 +166,8 @@ int main(int argc, char **argv) {
     }
 
     MPI_Bcast(&context->complete, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
+    MPI_Bcast(context->input_buffer,  (ssize_t)pow(context->array_size,2), MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
    while(1) {
         MPI_Scatterv(context->input_buffer, (int *) context->block_size, (int *) context->displacements, MPI_DOUBLE,
