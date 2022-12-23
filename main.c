@@ -45,28 +45,27 @@ struct Context {
 } typedef context_t;
 
 
-void print_array(void* arr, uint arrSize) {
-    double *array = (double *) arr;
-    for (uint y = 0; y < arrSize; ++y) {
-        for (int x = 0; x < arrSize; ++x) {
-            printf("%f ", array[arrSize * y + x]);
+void print_array(void* input_buffer, uint array_size) {
+    double *in = (double *) input_buffer;
+    for (uint y = 0; y < array_size; ++y) {
+        for (int x = 0; x < array_size; ++x) {
+            printf("%f ", in[array_size * y + x]);
         }
         printf("\n");
     }
 }
 
-double set_average(const double *arr, int y, int x, uint arrSize){
+double calculate_average(const double *input_buffer, const int y, const int x, const uint array_size){
 
-    double above = arr[arrSize * (y-1) + x];
-    double left = arr[arrSize * y + (x-1)];
-    double below = arr[arrSize * (y+1) + x];
-    double right = arr[arrSize * y + (x+1)];
-
+    double above = input_buffer[array_size * (y-1) + x];
+    double left = input_buffer[array_size * y + (x-1)];
+    double below = input_buffer[array_size * (y+1) + x];
+    double right = input_buffer[array_size * y + (x+1)];
 
     return (double) (above + left + below + right) / (double) 4;
 }
 
-void array_passthrough(context_t *context){
+void array_relaxation(context_t *context){
 
     int array_offset = context->displacements[context->rank];
 
@@ -82,7 +81,7 @@ void array_passthrough(context_t *context){
         }
 
         double old_value = context->local_buffer[i];
-        double new_value = set_average(context->input_buffer ,y , x, context->array_size);
+        double new_value = calculate_average(context->input_buffer ,y , x, context->array_size);
         context->local_buffer[i] = new_value;
 
         if (fabs(new_value - old_value) > context->precision){
@@ -99,8 +98,6 @@ int main(int argc, char **argv) {
         printf("Error starting MPI test program\n");
         MPI_Abort(MPI_COMM_WORLD, rc);
     }
-
-    int name_len;
 
     context_t *context = malloc(sizeof(context_t));
     context->array_size = (int) strtol(argv[1], 0,10);
@@ -133,7 +130,6 @@ int main(int argc, char **argv) {
     MPI_Bcast(context->block_size, context->n_processors, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Bcast(context->displacements, context->n_processors, MPI_INT, 0, MPI_COMM_WORLD);
 
-
     context->local_buffer = malloc((ssize_t) sizeof(double) * context->block_size[context->rank]);
 
     // make one processor allocate the array
@@ -160,13 +156,16 @@ int main(int argc, char **argv) {
     MPI_Bcast(context->input_buffer,  (int) pow(context->array_size,2), MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
     int result = 0;
+
     while(1) {
+        // subdivide the initial input buffer
         MPI_Scatterv(context->input_buffer, (int *) context->block_size, (int *) context->displacements, MPI_DOUBLE,
                      context->local_buffer, (int) context->block_size[context->rank], MPI_DOUBLE,
                      0, MPI_COMM_WORLD);
 
-        array_passthrough(context);
+        array_relaxation(context);
 
+        // gather all the values that have been altered.
         MPI_Gatherv(context->local_buffer, context->block_size[context->rank],
                     MPI_DOUBLE, context->input_buffer,
                     (int*) context->block_size, (int*)context->displacements,
@@ -179,6 +178,7 @@ int main(int argc, char **argv) {
         if (result == context->n_processors) {
             break;
         } else {
+            // not all processors are complete , reset the flag and do another cycle.
             context->complete = 1;
         }
     }
