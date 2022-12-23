@@ -84,8 +84,8 @@ void array_passthrough(context_t *context){
         }
 
         double old_value = context->local_buffer[i];
-        if (context->rank == 0){
-            printf("rank 0 \n");
+        if (context->rank == 1){
+            printf("rank 1 \n");
             print_array(context->input_buffer, context->array_size);
         }
         double new_value = set_average(context->input_buffer ,y , x, context->array_size);
