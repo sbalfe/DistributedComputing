@@ -55,6 +55,7 @@ void print_array(void* arr, uint arrSize) {
 }
 
 double set_average(const double *arr, int y, int x, uint arrSize){
+
     double above = arr[arrSize * (y-1) + x];
     double left = arr[arrSize * y + (x-1)];
     double below = arr[arrSize * (y+1) + x];
@@ -83,6 +84,9 @@ void array_passthrough(context_t *context){
         }
 
         double old_value = context->local_buffer[i];
+        if (context->rank == 0){
+            print_array(context->input_buffer, context->array_size);
+        }
         double new_value = set_average(context->input_buffer ,y , x, context->array_size);
 
         context->local_buffer[i] = new_value;
