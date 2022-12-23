@@ -185,10 +185,10 @@ int main(int argc, char **argv) {
             context->complete = 1;
         }
 
-        MPI_Barrier(MPI_COMM_WORLD);
         MPI_Bcast(&context->complete, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
         if (!context->complete){
+            printf("testing\n");
             context->complete = 1;
         }
         else {
