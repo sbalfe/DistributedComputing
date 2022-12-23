@@ -119,12 +119,12 @@ int main(int argc, char **argv) {
     MPI_Comm_size(MPI_COMM_WORLD, &context->n_processors);
 
     printf("my rank is %d\n", context->rank);
-//    char name[MPI_MAX_PROCESSOR_NAME];
-//
-//    context->block_size = malloc((ssize_t) sizeof(double) * context->n_processors);
-//    context->displacements = malloc((ssize_t) sizeof(double) * context->n_processors);
-//    context->input_buffer = malloc((ssize_t) sizeof(double) * ((ssize_t) pow(context->array_size,2)));
-//
+    char name[MPI_MAX_PROCESSOR_NAME];
+
+    context->block_size = malloc((ssize_t) sizeof(double) * context->n_processors);
+    context->displacements = malloc((ssize_t) sizeof(double) * context->n_processors);
+    context->input_buffer = malloc((ssize_t) sizeof(double) * ((ssize_t) pow(context->array_size,2)));
+    printf("test\n");
 //    if (context->rank == 0) {
 //        uint remainder = (uint) (pow(context->array_size,2)) % context->n_processors;
 //        int sum = 0;
