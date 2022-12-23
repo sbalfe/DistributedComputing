@@ -124,24 +124,24 @@ int main(int argc, char **argv) {
     context->block_size = malloc((ssize_t) sizeof(double) * context->n_processors);
     context->displacements = malloc((ssize_t) sizeof(double) * context->n_processors);
     context->input_buffer = malloc((ssize_t) sizeof(double) * ((ssize_t) pow(context->array_size,2)));
-    printf("test\n");
-//    if (context->rank == 0) {
-//        uint remainder = (uint) (pow(context->array_size,2)) % context->n_processors;
-//        int sum = 0;
-//        for (uint i = 0; i < context->n_processors; ++i) {
-//            context->block_size[i] = (int) (pow(context->array_size,2)) / context->n_processors;
-//            if (remainder > 0) {
-//                context->block_size[i]++;
-//                remainder--;
-//            }
-//            context->displacements[i] = sum;
-//            sum += context->block_size[i];
-//        }
-//    }
-//
-//    MPI_Bcast(context->block_size, context->n_processors, MPI_INT, 0, MPI_COMM_WORLD);
-//    MPI_Bcast(context->displacements, context->n_processors, MPI_INT, 0, MPI_COMM_WORLD);
-//
+
+    if (context->rank == 0) {
+        uint remainder = (uint) (pow(context->array_size,2)) % context->n_processors;
+        int sum = 0;
+        for (uint i = 0; i < context->n_processors; ++i) {
+            context->block_size[i] = (int) (pow(context->array_size,2)) / context->n_processors;
+            if (remainder > 0) {
+                context->block_size[i]++;
+                remainder--;
+            }
+            context->displacements[i] = sum;
+            sum += context->block_size[i];
+        }
+    }
+
+    MPI_Bcast(context->block_size, context->n_processors, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(context->displacements, context->n_processors, MPI_INT, 0, MPI_COMM_WORLD);
+    printf("test 2\n");
 //    context->local_buffer = malloc((ssize_t) sizeof(double) * context->block_size[context->rank]);
 //
 //    // make one processor allocate the array
