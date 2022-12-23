@@ -196,6 +196,7 @@ int main(int argc, char **argv) {
         }
     }
 
+    printf("rank: %d", context->rank);
     if (context->rank == 0) {
         print_array(context->input_buffer, context->array_size);
     }
