@@ -178,20 +178,19 @@ int main(int argc, char **argv) {
         MPI_Allreduce(&context->complete, &result, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
 
         if (result == context->n_processors) {
-            context->complete = 1;
-        } else {
-            context->complete = 0;
-        }
-
-
-        //MPI_Bcast(&context->complete, 1, MPI_INT, 0, MPI_COMM_WORLD);
-
-        if (!context->complete){
-            context->complete = 1;
-        }
-        else {
             break;
+        } else {
+            context->complete = 1;
         }
+//
+//        //MPI_Bcast(&context->complete, 1, MPI_INT, 0, MPI_COMM_WORLD);
+//
+//        if (!context->complete){
+//            context->complete = 1;
+//        }
+//        else {
+//            break;
+//        }
     }
 
     if (context->rank == 0) {
