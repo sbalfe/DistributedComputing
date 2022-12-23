@@ -139,9 +139,11 @@ int main(int argc, char **argv) {
         }
     }
 
+    printf("rank: %d", context->rank);
     MPI_Bcast(context->block_size, context->n_processors, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Bcast(context->displacements, context->n_processors, MPI_INT, 0, MPI_COMM_WORLD);
 
+    printf("rank2: %d", context->rank);
     context->local_buffer = malloc((ssize_t) sizeof(double) * context->block_size[context->rank]);
 
     // make one processor allocate the array
@@ -164,7 +166,8 @@ int main(int argc, char **argv) {
         context->complete = 1;
     }
 
-    //MPI_Bcast(&context->complete, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    printf("rank3: %d", context->rank);
+    MPI_Bcast(&context->complete, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
    while(1) {
         break;
