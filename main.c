@@ -167,11 +167,6 @@ int main(int argc, char **argv) {
 
     MPI_Bcast(&context->complete, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
-    if (context->rank == 0){
-        print_array(context->input_buffer, context->array_size);
-    }
-    MPI_Finalize();
-    return 0;
    while(1) {
         MPI_Scatterv(context->input_buffer, (int *) context->block_size, (int *) context->displacements, MPI_DOUBLE,
                      context->local_buffer, (int) context->block_size[context->rank], MPI_DOUBLE,
@@ -187,7 +182,7 @@ int main(int argc, char **argv) {
         // all processors could change the complete flag so one rank must check if any are 0, if so then broadcast 1
 
         if (context->rank == 0){
-            // this value is set to 0 or 1 where the main rank checks
+            // if any of the processors have 0, then set this to 0 as we are not done, otherwise 1 then broadcast
             context->complete = 1;
         }
 
@@ -206,7 +201,7 @@ int main(int argc, char **argv) {
         print_array(context->input_buffer, context->array_size);
     }
 
-    MPI_Barrier(MPI_COMM_WORLD);
+
     MPI_Finalize();
     return 0;
 }
