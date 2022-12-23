@@ -100,8 +100,8 @@ int main(int argc, char **argv) {
         }
     }
 
-    MPI_Bcast(context->block_size, context->n_processors, MPI_INT, 0, MPI_COMM_WORLD);
-    MPI_Bcast(context->displacements, context->n_processors, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(context->block_size, context->n_processors, MPI_INT, 0, new_comm);
+    MPI_Bcast(context->displacements, context->n_processors, MPI_INT, 0, new_comm);
 
     context->local_buffer = malloc((ssize_t) sizeof(double) * context->block_size[context->rank]);
 
@@ -125,8 +125,8 @@ int main(int argc, char **argv) {
         context->complete = 1;
     }
 
-    MPI_Bcast(&context->complete, 1, MPI_INT, 0, MPI_COMM_WORLD);
-    MPI_Bcast(context->input_buffer,  (int) pow(context->array_size,2), MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&context->complete, 1, MPI_INT, 0, new_comm);
+    MPI_Bcast(context->input_buffer,  (int) pow(context->array_size,2), MPI_DOUBLE, 0, new_comm);
 
     int result = 0;
 
@@ -134,7 +134,7 @@ int main(int argc, char **argv) {
         // subdivide the initial input buffer
         MPI_Scatterv(context->input_buffer, (int *) context->block_size, (int *) context->displacements, MPI_DOUBLE,
                      context->local_buffer, (int) context->block_size[context->rank], MPI_DOUBLE,
-                     0, MPI_COMM_WORLD);
+                     0, new_comm);
 
         array_relaxation(context);
 
@@ -142,11 +142,11 @@ int main(int argc, char **argv) {
         MPI_Gatherv(context->local_buffer, context->block_size[context->rank],
                     MPI_DOUBLE, context->input_buffer,
                     (int*) context->block_size, (int*)context->displacements,
-                    MPI_DOUBLE, 0, MPI_COMM_WORLD);
+                    MPI_DOUBLE, 0, new_comm);
 
-        MPI_Bcast(context->input_buffer,  (int) pow(context->array_size,2), MPI_DOUBLE, 0, MPI_COMM_WORLD);
+        MPI_Bcast(context->input_buffer,  (int) pow(context->array_size,2), MPI_DOUBLE, 0, new_comm);
 
-        MPI_Allreduce(&context->complete, &result, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
+        MPI_Allreduce(&context->complete, &result, 1, MPI_INT, MPI_SUM, new_comm);
 
         if (result == context->n_processors) {
             break;
@@ -160,7 +160,7 @@ int main(int argc, char **argv) {
         print_array(context->input_buffer, context->array_size);
     }
 
-    MPI_Barrier(MPI_COMM_WORLD);
+    MPI_Barrier(new_comm);
     MPI_Finalize();
     return 0;
 }
