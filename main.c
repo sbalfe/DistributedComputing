@@ -170,6 +170,7 @@ int main(int argc, char **argv) {
     if (context->rank == 0){
         print_array(context->input_buffer, context->array_size);
     }
+    MPI_Finalize();
     return 0;
    while(1) {
         MPI_Scatterv(context->input_buffer, (int *) context->block_size, (int *) context->displacements, MPI_DOUBLE,
