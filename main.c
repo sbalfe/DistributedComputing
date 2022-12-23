@@ -62,7 +62,6 @@ double set_average(const double *arr, int y, int x, uint arrSize){
     double below = arr[arrSize * (y+1) + x];
     double right = arr[arrSize * y + (x+1)];
 
-    printf("above: %f\n", above);
 
     return (double) (above + left + below + right) / (double) 4;
 }
@@ -71,8 +70,6 @@ void array_passthrough(context_t *context){
 
     int array_offset = context->displacements[context->rank];
 
-   // printf("rank: %d\n", context->rank);
-   // printf("array_offset: %d\n", array_offset);
     for (int i = 0; i < context->block_size[context->rank] ; ++i){
 
         // figure out what position we are at in the array in terms of rows and columns
@@ -85,12 +82,7 @@ void array_passthrough(context_t *context){
         }
 
         double old_value = context->local_buffer[i];
-        if (context->rank == 1){
-            printf("rank 1 \n");
-            print_array(context->input_buffer, context->array_size);
-        }
         double new_value = set_average(context->input_buffer ,y , x, context->array_size);
-
         context->local_buffer[i] = new_value;
 
         if (fabs(new_value - old_value) > context->precision){
@@ -123,7 +115,6 @@ int main(int argc, char **argv) {
     context->block_size = malloc((ssize_t) sizeof(double) * context->n_processors);
     context->displacements = malloc((ssize_t) sizeof(double) * context->n_processors);
     context->input_buffer = malloc((ssize_t) sizeof(double) * ((ssize_t) pow(context->array_size,2)));
-    context->output_buffer = malloc((ssize_t) sizeof(double) * ((ssize_t) pow(context->array_size,2)));
 
     if (context->rank == 0) {
         uint remainder = (uint) (pow(context->array_size,2)) % context->n_processors;
@@ -183,6 +174,8 @@ int main(int argc, char **argv) {
 
         // all processors could change the complete flag so one rank must check if any are 0, if so then broadcast 1
 
+        // input buffer to read the average is spread out.
+        MPI_Bcast(context->input_buffer,  (int) pow(context->array_size,2), MPI_DOUBLE, 0, MPI_COMM_WORLD);
         if (context->rank == 0){
             // if any of the processors have 0, then set this to 0 as we are not done, otherwise 1 then broadcast
             context->complete = 1;
