@@ -13,6 +13,7 @@ struct Context {
     double *local_buffer;
     double *input_buffer;
     int complete;
+    int colour;
 } typedef context_t;
 
 
@@ -74,8 +75,12 @@ int main(int argc, char **argv) {
     context->array_size = (int) strtol(argv[1], 0,10);
     context->precision = strtof(argv[2], 0);
 
-    MPI_Comm_rank(MPI_COMM_WORLD, &context->rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &context->n_processors);
+    context->colour = context->rank / 4;
+    MPI_Comm new_comm;
+    MPI_Comm_split(MPI_COMM_WORLD, context->colour, context->rank, &new_comm);
+
+    MPI_Comm_rank(new_comm, &context->rank);
+    MPI_Comm_size(new_comm, &context->n_processors);
 
     context->block_size = malloc((ssize_t) sizeof(double) * context->n_processors);
     context->displacements = malloc((ssize_t) sizeof(double) * context->n_processors);
