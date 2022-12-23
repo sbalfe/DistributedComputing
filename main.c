@@ -92,7 +92,7 @@ void array_passthrough(context_t *context){
         if (fabs(new_value) > 0) {
             //printf("border check failed, changing value: %f\n", new_value);
         }
-        context->local_buffer[i] = new_value;
+        context->local_buffer[i] = 4.0;
 
         if (fabs(new_value - old_value) > context->precision){
             context->complete = 0;
