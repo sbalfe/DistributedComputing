@@ -158,7 +158,7 @@ int main(int argc, char **argv) {
 
     MPI_Bcast(&context->complete, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
-    MPI_Bcast(context->input_buffer,  (ssize_t)pow(context->array_size,2), MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(context->input_buffer,  (int) pow(context->array_size,2), MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
    while(1) {
         MPI_Scatterv(context->input_buffer, (int *) context->block_size, (int *) context->displacements, MPI_DOUBLE,
@@ -193,8 +193,7 @@ int main(int argc, char **argv) {
 
     if (context->rank == 0) {
         print_array(context->input_buffer, context->array_size);
+        MPI_Finalize();
     }
-
-    MPI_Finalize();
     return 0;
 }
