@@ -167,6 +167,7 @@ int main(int argc, char **argv) {
     MPI_Bcast(&context->complete, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
    while(1) {
+        break;
         MPI_Scatterv(context->input_buffer, (int *) context->block_size, (int *) context->displacements, MPI_DOUBLE,
                      context->local_buffer, (int) context->block_size[context->rank], MPI_DOUBLE,
                      0, MPI_COMM_WORLD);
@@ -195,6 +196,7 @@ int main(int argc, char **argv) {
         else {
             break;
         }
+        break;
     }
 
     printf("rank: %d", context->rank);
