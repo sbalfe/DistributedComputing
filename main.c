@@ -60,7 +60,7 @@ double set_average(const double *arr, int y, int x, uint arrSize){
     double below = arr[arrSize * (y+1) + x];
     double right = arr[arrSize * y + (x+1)];
 
-    printf("above: %f , left: %f, below: %f, right: %f", above, left, below, right);
+    printf("above: %f\n", above);
 
     return (double) (above + left + below + right) / (double) 4;
 }
