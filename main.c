@@ -193,8 +193,9 @@ int main(int argc, char **argv) {
 
     if (context->rank == 0) {
         print_array(context->input_buffer, context->array_size);
-        MPI_Finalize();
     }
+
+    MPI_Barrier(MPI_COMM_WORLD);
     MPI_Finalize();
     return 0;
 }
