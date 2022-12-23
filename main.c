@@ -83,14 +83,14 @@ void array_passthrough(context_t *context){
             continue;
         }
 
-        printf("y: %d\n", y);
-        printf("x: %d\n", x);
+        //printf("y: %d\n", y);
+        //printf("x: %d\n", x);
 
         double old_value = context->local_buffer[i];
         double new_value = set_average(context->input_buffer , y,x, context->array_size);
 
         if (fabs(new_value) > 0) {
-            printf("border check failed, changing value: %f\n", new_value);
+            //printf("border check failed, changing value: %f\n", new_value);
         }
         context->local_buffer[i] = new_value;
 
