@@ -161,9 +161,6 @@ int main(int argc, char **argv) {
                 }
             }
         }
-    }
-
-    if (context->rank == 0) {
         context->complete = 1;
     }
 
@@ -176,24 +173,31 @@ int main(int argc, char **argv) {
 
         array_passthrough(context);
 
-
         MPI_Gatherv(context->local_buffer, context->block_size[context->rank],
                     MPI_DOUBLE, context->input_buffer,
                     (int*) context->block_size, (int*)context->displacements,
                     MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-        if (context->complete == 0) {
+        // all processors could change the complete flag so one rank must check if any are 0, if so then broadcast 1
+
+        if (context->rank == 0){
+            // this value is set to 0 or 1 where the main rank checks
             context->complete = 1;
-            MPI_Bcast(&context->complete, 1, MPI_INT, context->rank, MPI_COMM_WORLD);
+        }
+
+        MPI_Bcast(&context->complete, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
+        if (!context->complete){
+            context->complete = 1;
         }
         else {
             break;
         }
     }
-    printf("test 4\n");
-//    if (context->rank == 0) {
-//        print_array(context->input_buffer, context->array_size);
-//    }
+
+    if (context->rank == 0) {
+        print_array(context->input_buffer, context->array_size);
+    }
 
     MPI_Finalize();
     return 0;
