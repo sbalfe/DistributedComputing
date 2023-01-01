@@ -163,10 +163,10 @@ int main(int argc, char **argv) {
 
     MPI_Reduce(&elapsed, &total_elapsed_time, 1 , MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 
-    printf("Time elapsed for rank %d: %f\n", context->rank, end_time-start_time);
-
     if (context->rank == 0) {
         print_array(context->input_buffer, context->array_size);
+        double average = total_elapsed_time / context->n_processors;
+        printf("time elapsed: %f\n", average);
     }
 
     MPI_Barrier(MPI_COMM_WORLD);
