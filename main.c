@@ -13,7 +13,6 @@ struct Context {
     double *local_buffer;
     double *input_buffer;
     int complete;
-    int colour;
 } typedef context_t;
 
 
@@ -150,11 +149,10 @@ int main(int argc, char **argv) {
     }
 
     if (context->rank == 0) {
-        printf("cunt, rank: %d\n", context->rank);
         print_array(context->input_buffer, context->array_size);
     }
 
-    MPI_Barrier(MPI_COMM_WORLD);
+    //MPI_Barrier(MPI_COMM_WORLD);
     MPI_Finalize();
     return 0;
 }
