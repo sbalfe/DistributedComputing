@@ -144,7 +144,7 @@ int main(int argc, char **argv) {
                     (int*) context->block_size, (int*)context->displacements,
                     MPI_DOUBLE, 0, new_comm);
 
-        MPI_Bcast(context->input_buffer,  (int) pow(context->array_size,2), MPI_DOUBLE, 0, new_comm);
+        MPI_Bcast(context->input_buffer, (int) pow(context->array_size,2), MPI_DOUBLE, 0, new_comm);
 
         MPI_Allreduce(&context->complete, &result, 1, MPI_INT, MPI_SUM, new_comm);
 
@@ -157,6 +157,7 @@ int main(int argc, char **argv) {
     }
 
     if (context->rank == 0) {
+        printf("cunt");
         print_array(context->input_buffer, context->array_size);
     }
 
