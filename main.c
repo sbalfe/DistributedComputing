@@ -127,6 +127,9 @@ int main(int argc, char **argv) {
 
     int result = 0;
 
+
+    double start_time = MPI_Wtime();
+
     while(1) {
         // subdivide the initial input buffer
         MPI_Scatterv(context->input_buffer, (int *) context->block_size, (int *) context->displacements, MPI_DOUBLE,
@@ -152,6 +155,10 @@ int main(int argc, char **argv) {
             context->complete = 1;
         }
     }
+
+    double end_time = MPI_Wtime();
+
+    printf("Time elapsed for rank %d: %f\n", context->rank, end_time-start_time);
 
     if (context->rank == 0) {
         print_array(context->input_buffer, context->array_size);
