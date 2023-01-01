@@ -70,9 +70,14 @@ int main(int argc, char **argv) {
         MPI_Abort(MPI_COMM_WORLD, rc);
     }
 
+
     context_t *context = malloc(sizeof(context_t));
     context->array_size = (int) strtol(argv[1], 0,10);
     context->precision = strtof(argv[2], 0);
+
+    MPI_Comm_rank(MPI_COMM_WORLD, &context->rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &context->n_processors);
+
 
     context->block_size = malloc((ssize_t) sizeof(double) * context->n_processors);
     context->displacements = malloc((ssize_t) sizeof(double) * context->n_processors);
