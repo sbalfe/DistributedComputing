@@ -33,7 +33,7 @@ double calculate_average(const double *input_buffer, const int y, const int x, c
     double below = input_buffer[array_size * (y+1) + x];
     double right = input_buffer[array_size * y + (x+1)];
 
-    return (double) (above + left + below + right) / (double) 4;
+    return (above + left + below + right) / 4;
 }
 
 void array_relaxation(context_t *context){
