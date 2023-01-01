@@ -57,10 +57,10 @@ RM = /var/lib/snapd/snap/clion/219/bin/cmake/linux/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/shriller44/university/DistributedComputing
+CMAKE_SOURCE_DIR = /home/shriller44/university/University/ParallelComputing-CM30225/Coursework/distcomp/DistributedComputing
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/shriller44/university/DistributedComputing/cmake-build-debug
+CMAKE_BINARY_DIR = /home/shriller44/university/University/ParallelComputing-CM30225/Coursework/distcomp/DistributedComputing/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/shriller44/university/DistributedComputing/cmake-build-debug/CMakeFiles /home/shriller44/university/DistributedComputing/cmake-build-debug//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/shriller44/university/University/ParallelComputing-CM30225/Coursework/distcomp/DistributedComputing/cmake-build-debug/CMakeFiles /home/shriller44/university/University/ParallelComputing-CM30225/Coursework/distcomp/DistributedComputing/cmake-build-debug//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/shriller44/university/DistributedComputing/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/shriller44/university/University/ParallelComputing-CM30225/Coursework/distcomp/DistributedComputing/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

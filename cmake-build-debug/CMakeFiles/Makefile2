@@ -54,10 +54,10 @@ RM = /var/lib/snapd/snap/clion/219/bin/cmake/linux/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/shriller44/university/DistributedComputing
+CMAKE_SOURCE_DIR = /home/shriller44/university/University/ParallelComputing-CM30225/Coursework/distcomp/DistributedComputing
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/shriller44/university/DistributedComputing/cmake-build-debug
+CMAKE_BINARY_DIR = /home/shriller44/university/University/ParallelComputing-CM30225/Coursework/distcomp/DistributedComputing/cmake-build-debug
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -81,14 +81,14 @@ clean: CMakeFiles/DistributedComputing.dir/clean
 CMakeFiles/DistributedComputing.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DistributedComputing.dir/build.make CMakeFiles/DistributedComputing.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/DistributedComputing.dir/build.make CMakeFiles/DistributedComputing.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/shriller44/university/DistributedComputing/cmake-build-debug/CMakeFiles --progress-num=1,2 "Built target DistributedComputing"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/shriller44/university/University/ParallelComputing-CM30225/Coursework/distcomp/DistributedComputing/cmake-build-debug/CMakeFiles --progress-num=1,2 "Built target DistributedComputing"
 .PHONY : CMakeFiles/DistributedComputing.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/DistributedComputing.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/shriller44/university/DistributedComputing/cmake-build-debug/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/shriller44/university/University/ParallelComputing-CM30225/Coursework/distcomp/DistributedComputing/cmake-build-debug/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/DistributedComputing.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/shriller44/university/DistributedComputing/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/shriller44/university/University/ParallelComputing-CM30225/Coursework/distcomp/DistributedComputing/cmake-build-debug/CMakeFiles 0
 .PHONY : CMakeFiles/DistributedComputing.dir/rule
 
 # Convenience name for target.

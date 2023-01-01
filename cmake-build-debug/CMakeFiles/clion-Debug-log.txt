@@ -1,4 +1,12 @@
-/var/lib/snapd/snap/clion/219/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=/usr/bin/clang -G "CodeBlocks - Unix Makefiles" -S /home/shriller44/university/DistributedComputing -B /home/shriller44/university/DistributedComputing/cmake-build-debug
+/var/lib/snapd/snap/clion/219/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" -S /home/shriller44/university/University/ParallelComputing-CM30225/Coursework/distcomp/DistributedComputing -B /home/shriller44/university/University/ParallelComputing-CM30225/Coursework/distcomp/DistributedComputing/cmake-build-debug
+-- The C compiler identification is GNU 12.2.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Found MPI_C: /usr/lib/libmpi.so (found version "3.1") 
+-- Found MPI: TRUE (found version "3.1")  
 -- Configuring done
 -- Generating done
--- Build files have been written to: /home/shriller44/university/DistributedComputing/cmake-build-debug
+-- Build files have been written to: /home/shriller44/university/University/ParallelComputing-CM30225/Coursework/distcomp/DistributedComputing/cmake-build-debug

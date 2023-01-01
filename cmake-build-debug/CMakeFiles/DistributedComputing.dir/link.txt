@@ -1,1 +1,1 @@
-/usr/bin/clang -g CMakeFiles/DistributedComputing.dir/main.c.o -o DistributedComputing  /usr/lib64/libmpi.so -lm -ldl 
+/usr/bin/cc -g CMakeFiles/DistributedComputing.dir/main.c.o -o DistributedComputing  /usr/lib/libmpi.so -lm -ldl 

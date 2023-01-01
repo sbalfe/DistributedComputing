@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/shriller44/university/DistributedComputing/main.c" "CMakeFiles/DistributedComputing.dir/main.c.o" "gcc" "CMakeFiles/DistributedComputing.dir/main.c.o.d"
+  "/home/shriller44/university/University/ParallelComputing-CM30225/Coursework/distcomp/DistributedComputing/main.c" "CMakeFiles/DistributedComputing.dir/main.c.o" "gcc" "CMakeFiles/DistributedComputing.dir/main.c.o.d"
   )
 
 # Targets to which this target links.
