@@ -157,7 +157,7 @@ int main(int argc, char **argv) {
     }
 
     if (context->rank == 0) {
-        printf("cunt");
+        printf("cunt, rank: %d\n", context->rank);
         print_array(context->input_buffer, context->array_size);
     }
 
