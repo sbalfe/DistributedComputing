@@ -157,6 +157,11 @@ int main(int argc, char **argv) {
     }
 
     double end_time = MPI_Wtime();
+    double elapsed = end_time - start_time;
+
+    double total_elapsed_time;
+
+    MPI_Reduce(&elapsed, &total_elapsed_time, 1 , MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 
     printf("Time elapsed for rank %d: %f\n", context->rank, end_time-start_time);
 
